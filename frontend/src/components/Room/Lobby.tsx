@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Room, Player } from '../../../packages/shared/src/types';
+import { Room, Player } from '@shared/types';
 import { Button } from '../UI/Button';
 import { copyToClipboard, getRoomUrl } from '../../utils/gameHelpers';
 

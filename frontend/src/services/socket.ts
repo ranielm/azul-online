@@ -9,7 +9,7 @@ import {
   RoomIdPayload,
   ReconnectPayload,
   PlayerMove,
-} from '../../packages/shared/src/types';
+} from '@shared/types';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3001';
 

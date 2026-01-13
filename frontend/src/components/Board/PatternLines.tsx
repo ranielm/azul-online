@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { PatternLine, TileColor, WallCell } from '../../../packages/shared/src/types';
+import { PatternLine, TileColor, WallCell } from '@shared/types';
 import { Tile } from '../Tile/Tile';
 import { canPlaceTileInPatternLine } from '../../utils/gameHelpers';
 

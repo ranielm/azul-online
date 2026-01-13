@@ -1,5 +1,5 @@
-import { TileColor, PatternLine, WallCell } from '../../packages/shared/src/types';
-import { WALL_PATTERN } from '../../packages/shared/src/constants';
+import { TileColor, PatternLine, WallCell } from '@shared/types';
+import { WALL_PATTERN } from '@shared/constants';
 
 export function getTileColorClass(color: TileColor | 'first-player'): string {
   switch (color) {

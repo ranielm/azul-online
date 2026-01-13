@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { WallCell } from '../../../packages/shared/src/types';
+import { WallCell } from '@shared/types';
 import { Tile } from '../Tile/Tile';
 
 interface WallProps {

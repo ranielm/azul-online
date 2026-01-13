@@ -9,7 +9,7 @@ import { GameBoard } from './components/Game/GameBoard';
 import { GameOver } from './components/Game/GameOver';
 import { Toast } from './components/UI/Toast';
 import { Button } from './components/UI/Button';
-import { TileSelection } from '../packages/shared/src/types';
+import { TileSelection } from '@shared/types';
 
 type Screen = 'home' | 'create' | 'join' | 'lobby' | 'game';
 

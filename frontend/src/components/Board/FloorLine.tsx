@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Tile as TileType } from '../../../packages/shared/src/types';
+import { Tile as TileType } from '@shared/types';
 import { Tile } from '../Tile/Tile';
-import { FLOOR_PENALTIES, MAX_FLOOR_TILES } from '../../../packages/shared/src/constants';
+import { FLOOR_PENALTIES, MAX_FLOOR_TILES } from '@shared/constants';
 
 interface FloorLineProps {
   floorLine: TileType[];

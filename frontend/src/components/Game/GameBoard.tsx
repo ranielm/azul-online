@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { GameState, TileSelection, PlayerMove } from '../../../packages/shared/src/types';
+import { GameState, TileSelection, PlayerMove } from '@shared/types';
 import { Board } from '../Board/Board';
 import { FactoryDisplay } from '../Factory/FactoryDisplay';
 

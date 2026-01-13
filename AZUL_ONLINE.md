@@ -844,3 +844,104 @@ This project is open source and available under the [MIT License](LICENSE).
 ---
 
 **Ready to play? Start building!** 🎯
+
+---
+
+## Online Multiplayer Architecture (Definitive)
+
+### Online Multiplayer Requirement (Mandatory)
+
+This project is designed as a **true online multiplayer game**, not a local or shared-device experience.
+
+Players must be able to:
+- Join the same game **from different physical locations**
+- Use **different networks, devices, and browsers**
+- Play together **simultaneously in real time**
+
+There is **no local-only mode** in the MVP. All gameplay is synchronized through an online server.
+
+> *Azul Online is a fully online multiplayer game, designed for players connecting remotely over the internet, with a server-authoritative architecture ensuring fair play, synchronization, and scalability.*
+
+### Client-Server Architecture
+
+- The game uses a **central authoritative server**
+- Each player connects remotely via the internet
+- The server owns and validates:
+  - Game state
+  - Turn order
+  - Rule enforcement
+  - Scoring
+  - End-game conditions
+
+Clients are **never allowed** to modify game state directly.
+
+### Online Connectivity
+
+**Communication Layer:**
+- WebSocket-based real-time communication
+- Socket.io over HTTPS/WSS
+- Persistent connection per player session
+
+**Why WebSockets:**
+- Low latency
+- Instant state propagation
+- Ideal for turn-based but synchronous gameplay
+- Works reliably across browsers and networks
+
+### Online Game Flow
+
+1. **Room Creation (Online)**
+   - One player creates a room on the server
+   - A unique room ID and URL are generated
+   - The link is shared with remote players
+
+2. **Remote Player Join**
+   - Players join from different locations
+   - Nickname is chosen
+   - Server assigns a unique player ID
+   - Connection status is tracked
+
+3. **Online Synchronization**
+   - All players receive the same authoritative game state
+   - Any action by one player is validated server-side
+   - Updates are broadcast instantly to all connected clients
+
+4. **Turn Enforcement**
+   - Only the active player can perform actions
+   - Other players' UIs are locked during that turn
+   - Invalid or late actions are rejected
+
+### Connection Reliability
+
+**Disconnect Handling:**
+- Temporary disconnections are tolerated
+- Player can reconnect using Room ID and Session token
+- Game state is restored on reconnect
+
+**Failure Scenarios:**
+- Player disconnects mid-turn: turn pauses or auto-resolves
+- Player leaves permanently: game can pause, continue with AI, or end by consensus
+
+### Security & Fair Play
+
+- All actions validated server-side
+- No trust in client-side calculations
+- Anti-spam and rate limiting on socket events
+- Sanitized inputs for nicknames and messages
+
+### Scalability
+
+- Each room runs as an isolated game instance
+- Multiple rooms can run concurrently
+- Stateless backend endpoints + in-memory or Redis-based game state
+- Horizontally scalable architecture
+
+### Commercial Readiness
+
+This architecture supports:
+- Public matchmaking
+- Private invite-only rooms
+- Ranked online play
+- Spectator mode
+- Replays and analytics
+- Monetization features (cosmetics, premium rooms)

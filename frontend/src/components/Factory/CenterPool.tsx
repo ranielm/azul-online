@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CenterPool as CenterPoolType, TileColor, TileSelection } from '../../../packages/shared/src/types';
+import { CenterPool as CenterPoolType, TileColor, TileSelection } from '@shared/types';
 import { Tile } from '../Tile/Tile';
 import { groupTilesByColor } from '../../utils/gameHelpers';
 

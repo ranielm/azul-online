@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Player, TileSelection, TilePlacement, PlayerMove } from '../../../packages/shared/src/types';
+import { Player, TileSelection, TilePlacement, PlayerMove } from '@shared/types';
 import { PatternLines } from './PatternLines';
 import { Wall } from './Wall';
 import { FloorLine } from './FloorLine';

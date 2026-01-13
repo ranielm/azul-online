@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { GameState } from '../../../packages/shared/src/types';
+import { GameState } from '@shared/types';
 import { Button } from '../UI/Button';
 
 interface GameOverProps {

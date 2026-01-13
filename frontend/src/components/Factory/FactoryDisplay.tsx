@@ -1,5 +1,5 @@
 import React from 'react';
-import { Factory as FactoryType, TileSelection, CenterPool as CenterPoolType } from '../../../packages/shared/src/types';
+import { Factory as FactoryType, TileSelection, CenterPool as CenterPoolType } from '@shared/types';
 import { Factory } from './Factory';
 import { CenterPool } from './CenterPool';
 

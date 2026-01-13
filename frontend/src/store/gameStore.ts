@@ -4,7 +4,7 @@ import {
   GameState,
   TileColor,
   TileSelection,
-} from '../../packages/shared/src/types';
+} from '@shared/types';
 
 interface GameStore {
   // Connection state

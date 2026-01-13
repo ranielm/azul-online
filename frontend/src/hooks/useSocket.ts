@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import socketService from '../services/socket';
 import { useGameStore } from '../store/gameStore';
-import { PlayerMove } from '../../packages/shared/src/types';
+import { PlayerMove } from '@shared/types';
 
 export function useSocket() {
   const {

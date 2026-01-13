@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TileColor, Tile as TileType } from '../../../packages/shared/src/types';
+import { TileColor, Tile as TileType } from '@shared/types';
 import { getTileColorClass } from '../../utils/gameHelpers';
 
 interface TileProps {
