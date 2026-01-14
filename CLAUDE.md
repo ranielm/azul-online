@@ -71,3 +71,29 @@ Fixed a bug where the host would see a black screen when a second player joined 
 ## Summary:
 
 Added internationalization (i18n) support with Portuguese (PT-BR) and English (EN-US) languages. The language selector appears in the top-right corner of all screens and the preference is persisted in localStorage. All user-facing strings across the application are now translatable. Also improved tile colors to be more saturated and visually distinct while maintaining a professional appearance without excessive glow effects.
+
+---
+
+# AZUL-ONLINE: Landing Page Redesign, Auth UI & Game Controls
+
+**Date:** 2026-01-14
+
+## Changes:
+
+- `frontend/src/components/Landing/LandingPage.tsx`: Complete redesign with glassmorphism aesthetic, floating animated tiles, tabbed interface (Quick Play / Login)
+- `frontend/src/store/authStore.ts`: Zustand store with localStorage persistence for user authentication state
+- `frontend/src/components/Auth/AvatarUpload.tsx`: Avatar upload component with game token styling (colored borders, glow effects)
+- `frontend/src/components/Auth/LoginForm.tsx`: Login form with email/password fields
+- `frontend/src/components/Auth/SignUpForm.tsx`: Multi-step signup form with avatar selection step
+- `frontend/src/components/UI/ConfirmModal.tsx`: Reusable confirmation modal with danger/warning variants
+- `frontend/src/components/Game/GameControls.tsx`: Game controls toolbar with fullscreen toggle and leave game button
+- `frontend/src/components/Game/GameBoard.tsx`: Integrated GameControls, added onLeaveGame prop
+- `frontend/src/components/Board/PatternLines.tsx`: Fixed empty slot visibility with dashed borders
+- `frontend/src/components/Board/FloorLine.tsx`: Fixed empty slot visibility with dashed borders
+- `frontend/src/styles/globals.css`: Added Portuguese tile palette, glassmorphism classes, landing page styles
+- `frontend/src/i18n/translations.ts`: Added auth and game controls translations for PT-BR and EN-US
+- `frontend/src/App.tsx`: Passed handleLeaveRoom to GameBoard component
+
+## Summary:
+
+Major UI/UX improvements including a complete landing page redesign with "Modern Portuguese Architecture" glassmorphism aesthetic featuring floating animated decorative tiles and a tabbed interface for Quick Play (guest mode) and Login/Register (auth mode). Added user authentication UI with avatar upload that displays profile pictures as game tokens with customizable colored borders matching the tile palette. Implemented game controls toolbar with fullscreen toggle (using browser Fullscreen API) and leave game button with confirmation modal to prevent accidental exits. Fixed pattern lines and floor line empty slot visibility with restored dashed borders and faint backgrounds for better contrast against the dark theme.

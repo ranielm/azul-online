@@ -45,10 +45,12 @@ export function PatternLines({
             {Array.from({ length: line.capacity - line.count }).map((_, i) => (
               <div
                 key={`empty-${i}`}
-                className={`
-                  w-6 h-6 rounded-sm border-2 border-dashed
-                  ${canPlace ? 'border-yellow-400/50' : 'border-slate-600'}
-                `}
+                className="w-6 h-6 rounded-sm"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                  border: `2px dashed ${canPlace && !disabled ? 'rgba(232, 241, 242, 1)' : 'rgba(232, 241, 242, 0.5)'}`,
+                  boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.3)',
+                }}
               />
             ))}
 

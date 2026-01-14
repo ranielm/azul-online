@@ -3,16 +3,64 @@
 @tailwind utilities;
 
 :root {
-  --tile-blue: #0ea5e9;
-  --tile-yellow: #fbbf24;
-  --tile-red: #f43f5e;
-  --tile-black: #334155;
-  --tile-white: #f1f5f9;
+  --tile-blue: #006DB2;
+  --tile-yellow: #E6A745;
+  --tile-red: #D93844;
+  --tile-black: #606C76;
+  --tile-white: #E8F1F2;
 }
 
 body {
-  @apply bg-gradient-to-br from-slate-900 to-slate-800 min-h-screen text-white;
+  @apply min-h-screen text-white;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: radial-gradient(ellipse at center, #1e293b 0%, #0f172a 50%, #020617 100%);
+}
+
+/* Landing Page Styles */
+.landing-background {
+  background: radial-gradient(ellipse at center, #1e293b 0%, #0f172a 50%, #020617 100%);
+  position: relative;
+}
+
+.landing-background::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.text-tile-white {
+  color: #E8F1F2;
+}
+
+.landing-btn-primary {
+  background: linear-gradient(145deg, #0080CC 0%, #005A99 100%);
+  border-bottom: 3px solid #004A7C;
+  box-shadow: 0 4px 12px rgba(0, 109, 178, 0.3);
+}
+
+.landing-btn-primary:hover {
+  background: linear-gradient(145deg, #0090DD 0%, #006DB2 100%);
+}
+
+.landing-btn-secondary {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #E8F1F2;
+}
+
+.landing-btn-secondary:hover {
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 .tile {
@@ -23,35 +71,36 @@ body {
   @apply transform scale-110;
 }
 
+/* Portuguese Tile Palette - Ceramic/Resin look */
 .tile-blue {
-  background: linear-gradient(145deg, #2563eb 0%, #1d4ed8 100%);
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+  background: linear-gradient(145deg, #0080CC 0%, #005A99 100%);
+  box-shadow: 0 2px 6px rgba(0, 109, 178, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .tile-yellow {
-  background: linear-gradient(145deg, #eab308 0%, #ca8a04 100%);
-  box-shadow: 0 2px 8px rgba(234, 179, 8, 0.4);
+  background: linear-gradient(145deg, #F0B652 0%, #CC8F38 100%);
+  box-shadow: 0 2px 6px rgba(230, 167, 69, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .tile-red {
-  background: linear-gradient(145deg, #dc2626 0%, #b91c1c 100%);
-  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+  background: linear-gradient(145deg, #E84550 0%, #BF2D38 100%);
+  box-shadow: 0 2px 6px rgba(217, 56, 68, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .tile-black {
-  background: linear-gradient(145deg, #475569 0%, #1e293b 100%);
-  box-shadow: 0 2px 8px rgba(71, 85, 105, 0.4);
+  background: linear-gradient(145deg, #3D444D 0%, #1F252B 100%);
+  box-shadow: 0 2px 6px rgba(31, 37, 43, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .tile-white {
-  background: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 100%);
-  box-shadow: 0 2px 8px rgba(248, 250, 252, 0.4);
-  @apply border border-slate-400;
+  background: linear-gradient(145deg, #F2F8F9 0%, #D8E4E6 100%);
+  box-shadow: 0 2px 6px rgba(232, 241, 242, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  @apply border border-slate-500/30;
 }
 
 .tile-first-player {
   @apply bg-gradient-to-br from-teal-500 to-teal-600 text-white flex items-center justify-center text-xs font-bold;
-  box-shadow: 0 2px 8px rgba(20, 184, 166, 0.4);
+  box-shadow: 0 2px 6px rgba(20, 184, 166, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .factory {
@@ -63,15 +112,16 @@ body {
 }
 
 .wall-cell {
-  @apply w-8 h-8 rounded-sm border border-slate-600;
+  @apply w-8 h-8 rounded-sm bg-slate-800/50;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .wall-cell.filled {
-  @apply border-0;
+  box-shadow: none;
 }
 
 .wall-cell.empty {
-  @apply opacity-30;
+  @apply opacity-25;
 }
 
 .floor-line {

@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSocket } from './hooks/useSocket';
 import { useGameStore } from './store/gameStore';
+import { LandingPage } from './components/Landing/LandingPage';
 import { CreateRoom } from './components/Room/CreateRoom';
 import { JoinRoom } from './components/Room/JoinRoom';
 import { Lobby } from './components/Room/Lobby';
 import { GameBoard } from './components/Game/GameBoard';
 import { GameOver } from './components/Game/GameOver';
 import { Toast } from './components/UI/Toast';
-import { Button } from './components/UI/Button';
 import { LanguageSelector } from './components/UI/LanguageSelector';
 import { useTranslation } from './i18n/useLanguage';
 import { TileSelection } from '@shared/types';
@@ -108,44 +108,11 @@ function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="min-h-screen flex flex-col items-center justify-center p-4"
           >
-            <motion.div
-              initial={{ y: -20 }}
-              animate={{ y: 0 }}
-              className="text-center mb-12"
-            >
-              <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-                {t.title}
-              </h1>
-              <p className="text-xl text-slate-400">
-                {t.subtitle}
-              </p>
-            </motion.div>
-
-            <div className="flex flex-col gap-4 w-full max-w-xs">
-              <Button
-                variant="primary"
-                size="lg"
-                onClick={() => setScreen('create')}
-                className="w-full"
-              >
-                {t.createRoom}
-              </Button>
-              <Button
-                variant="secondary"
-                size="lg"
-                onClick={() => setScreen('join')}
-                className="w-full"
-              >
-                {t.joinRoom}
-              </Button>
-            </div>
-
-            <div className="mt-12 text-center text-slate-500 text-sm">
-              <p>{t.noAccountNeeded}</p>
-              <p className="mt-2">2-4 {t.players}</p>
-            </div>
+            <LandingPage
+              onCreateRoom={() => setScreen('create')}
+              onJoinRoom={() => setScreen('join')}
+            />
           </motion.div>
         )}
 
@@ -218,6 +185,7 @@ function App() {
               onSelectTiles={handleSelectTiles}
               onClearSelection={handleClearSelection}
               onMakeMove={makeMove}
+              onLeaveGame={handleLeaveRoom}
             />
 
             {/* Game Over Modal */}

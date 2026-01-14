@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { GameState, TileSelection, PlayerMove } from '@shared/types';
 import { Board } from '../Board/Board';
 import { FactoryDisplay } from '../Factory/FactoryDisplay';
+import { GameControls } from './GameControls';
 import { useTranslation } from '../../i18n/useLanguage';
 
 interface GameBoardProps {
@@ -12,6 +13,7 @@ interface GameBoardProps {
   onSelectTiles: (selection: TileSelection) => void;
   onClearSelection: () => void;
   onMakeMove: (move: PlayerMove) => void;
+  onLeaveGame: () => void;
 }
 
 export function GameBoard({
@@ -21,6 +23,7 @@ export function GameBoard({
   onSelectTiles,
   onClearSelection,
   onMakeMove,
+  onLeaveGame,
 }: GameBoardProps) {
   const currentPlayer = gameState.players[gameState.currentPlayerIndex];
   const isMyTurn = currentPlayer?.id === playerId;
@@ -28,6 +31,9 @@ export function GameBoard({
 
   return (
     <div className="container mx-auto px-4 py-6">
+      {/* Game Controls Toolbar */}
+      <GameControls onLeaveGame={onLeaveGame} />
+
       {/* Game info header */}
       <div className="text-center mb-6">
         <h2 className="text-xl font-semibold mb-2">
