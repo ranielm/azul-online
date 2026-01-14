@@ -54,7 +54,7 @@ export function GameControls({ onLeaveGame }: GameControlsProps) {
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="fixed top-4 right-20 z-40 flex gap-2"
+        className="fixed top-4 right-32 z-40 flex gap-2"
       >
         {/* Fullscreen Toggle */}
         <motion.button
