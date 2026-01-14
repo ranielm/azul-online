@@ -1,9 +1,8 @@
 import { customAlphabet } from 'nanoid';
-import { Room, Player, GameState } from '../../../packages/shared/src/types';
-import { ROOM_ID_LENGTH, MIN_PLAYERS } from '../../../packages/shared/src/constants';
+import { Room, Player, GameState, PlayerMove } from '../shared/types';
+import { ROOM_ID_LENGTH, MIN_PLAYERS } from '../shared/constants';
 import * as store from './store';
 import { initializeGame, executeMove, processEndOfRound } from '../game/engine';
-import { PlayerMove } from '../../../packages/shared/src/types';
 
 // Generate URL-friendly room IDs
 const generateRoomId = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', ROOM_ID_LENGTH);

@@ -1,4 +1,4 @@
-import { Room, GameState, Player } from '../../../packages/shared/src/types';
+import { Room, GameState, Player } from '../shared/types';
 
 // In-memory store for rooms
 const rooms: Map<string, Room> = new Map();

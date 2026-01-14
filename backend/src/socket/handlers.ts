@@ -6,8 +6,8 @@ import {
   GameMovePayload,
   RoomIdPayload,
   ReconnectPayload,
-} from '../../../packages/shared/src/types';
-import { isValidPlayerName } from '../../../packages/shared/src/validation';
+} from '../shared/types';
+import { isValidPlayerName } from '../shared/validation';
 
 // Track which room each socket is in
 const socketRooms: Map<string, string> = new Map();

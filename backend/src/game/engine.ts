@@ -10,7 +10,7 @@ import {
   CenterPool,
   RoundScore,
   FinalScore,
-} from '../../../packages/shared/src/types';
+} from '../shared/types';
 import {
   TILE_COLORS,
   TILES_PER_COLOR,
@@ -24,8 +24,8 @@ import {
   BONUS_COMPLETE_ROW,
   BONUS_COMPLETE_COLUMN,
   BONUS_COMPLETE_COLOR,
-} from '../../../packages/shared/src/constants';
-import { validateMove } from '../../../packages/shared/src/validation';
+} from '../shared/constants';
+import { validateMove } from '../shared/validation';
 
 // Shuffle array using Fisher-Yates algorithm
 function shuffleArray<T>(array: T[]): T[] {
