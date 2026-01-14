@@ -1,7 +1,28 @@
 import { Room, GameState, Player } from '../shared/types';
+import {
+  saveRoom,
+  deleteRoomFromDb,
+  loadAllRooms,
+  cleanupStaleRoomsFromDb,
+} from '../persistence/database';
 
 // In-memory store for rooms
 const rooms: Map<string, Room> = new Map();
+
+// 48 hours in milliseconds
+const ROOM_MAX_AGE_MS = 48 * 60 * 60 * 1000;
+
+export function initializeFromDatabase(): void {
+  const persistedRooms = loadAllRooms();
+
+  for (const room of persistedRooms) {
+    // Mark all players as disconnected (server restarted)
+    room.gameState.players.forEach((p) => (p.isConnected = false));
+    rooms.set(room.id, room);
+  }
+
+  console.log(`Loaded ${persistedRooms.length} rooms from database`);
+}
 
 export function createRoom(
   id: string,
@@ -30,6 +51,7 @@ export function createRoom(
   };
 
   rooms.set(id, room);
+  saveRoom(room);
   return room;
 }
 
@@ -39,10 +61,12 @@ export function getRoom(id: string): Room | undefined {
 
 export function updateRoom(id: string, room: Room): void {
   rooms.set(id, room);
+  saveRoom(room);
 }
 
 export function deleteRoom(id: string): void {
   rooms.delete(id);
+  deleteRoomFromDb(id);
 }
 
 export function roomExists(id: string): boolean {
@@ -63,18 +87,25 @@ export function addPlayerToRoom(roomId: string, player: Player): Room | null {
 
   room.gameState.players.push(player);
   rooms.set(roomId, room);
+  saveRoom(room);
   return room;
 }
 
-export function removePlayerFromRoom(roomId: string, playerId: string): Room | null {
+export function removePlayerFromRoom(
+  roomId: string,
+  playerId: string
+): Room | null {
   const room = rooms.get(roomId);
   if (!room) return null;
 
-  room.gameState.players = room.gameState.players.filter((p) => p.id !== playerId);
+  room.gameState.players = room.gameState.players.filter(
+    (p) => p.id !== playerId
+  );
 
   // If room is empty, delete it
   if (room.gameState.players.length === 0) {
     rooms.delete(roomId);
+    deleteRoomFromDb(roomId);
     return null;
   }
 
@@ -85,15 +116,20 @@ export function removePlayerFromRoom(roomId: string, playerId: string): Room | n
   }
 
   rooms.set(roomId, room);
+  saveRoom(room);
   return room;
 }
 
-export function updateGameState(roomId: string, gameState: GameState): Room | null {
+export function updateGameState(
+  roomId: string,
+  gameState: GameState
+): Room | null {
   const room = rooms.get(roomId);
   if (!room) return null;
 
   room.gameState = gameState;
   rooms.set(roomId, room);
+  saveRoom(room);
   return room;
 }
 
@@ -111,6 +147,7 @@ export function setPlayerConnected(
   }
 
   rooms.set(roomId, room);
+  saveRoom(room);
   return room;
 }
 
@@ -118,19 +155,28 @@ export function getAllRooms(): Room[] {
   return Array.from(rooms.values());
 }
 
-// Clean up stale rooms (no activity for 1 hour)
+// Clean up stale rooms (no activity for 48 hours with all players disconnected)
 export function cleanupStaleRooms(): void {
-  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+  const cutoffTime = new Date(Date.now() - ROOM_MAX_AGE_MS);
 
   for (const [id, room] of rooms.entries()) {
-    if (room.createdAt < oneHourAgo) {
+    if (room.createdAt < cutoffTime) {
       // Check if all players are disconnected
-      const allDisconnected = room.gameState.players.every((p) => !p.isConnected);
+      const allDisconnected = room.gameState.players.every(
+        (p) => !p.isConnected
+      );
       if (allDisconnected) {
         rooms.delete(id);
+        deleteRoomFromDb(id);
         console.log(`Cleaned up stale room: ${id}`);
       }
     }
+  }
+
+  // Also cleanup from database directly (in case of missed in-memory rooms)
+  const cleaned = cleanupStaleRoomsFromDb(ROOM_MAX_AGE_MS);
+  if (cleaned > 0) {
+    console.log(`Cleaned up ${cleaned} stale rooms from database`);
   }
 }
 

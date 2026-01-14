@@ -3,8 +3,14 @@ import { createServer as createHttpServer } from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
 import { setupSocketHandlers } from './socket/handlers';
+import { initDatabase } from './persistence/database';
+import { initializeFromDatabase } from './room/store';
 
 export function createServer() {
+  // Initialize database and load persisted rooms
+  initDatabase();
+  initializeFromDatabase();
+
   const app = express();
   const httpServer = createHttpServer(app);
 

@@ -31,16 +31,16 @@ export function useSocket() {
     socketService.onRoomCreated(({ room, playerId }) => {
       setRoom(room);
       setPlayerId(playerId);
-      // Save to session storage for reconnection
-      sessionStorage.setItem('azul-room-id', room.id);
-      sessionStorage.setItem('azul-player-id', playerId);
+      // Save to localStorage for reconnection (persists across browser sessions)
+      localStorage.setItem('azul-room-id', room.id);
+      localStorage.setItem('azul-player-id', playerId);
     });
 
     socketService.onRoomJoined(({ room, playerId }) => {
       setRoom(room);
       setPlayerId(playerId);
-      sessionStorage.setItem('azul-room-id', room.id);
-      sessionStorage.setItem('azul-player-id', playerId);
+      localStorage.setItem('azul-room-id', room.id);
+      localStorage.setItem('azul-player-id', playerId);
     });
 
     socketService.onRoomUpdated(({ room }) => {
@@ -111,9 +111,9 @@ export function useSocket() {
       });
     });
 
-    // Try to reconnect if we have stored session
-    const storedRoomId = sessionStorage.getItem('azul-room-id');
-    const storedPlayerId = sessionStorage.getItem('azul-player-id');
+    // Try to reconnect if we have stored session (now using localStorage for persistence)
+    const storedRoomId = localStorage.getItem('azul-room-id');
+    const storedPlayerId = localStorage.getItem('azul-player-id');
     if (storedRoomId && storedPlayerId) {
       socketService.reconnect(storedRoomId, storedPlayerId);
     }
@@ -137,8 +137,8 @@ export function useSocket() {
       socketService.leaveRoom(room.id);
       setRoom(null);
       setGameState(null);
-      sessionStorage.removeItem('azul-room-id');
-      sessionStorage.removeItem('azul-player-id');
+      localStorage.removeItem('azul-room-id');
+      localStorage.removeItem('azul-player-id');
     }
   }, [room, setRoom, setGameState]);
 
