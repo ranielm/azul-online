@@ -7,3 +7,7 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+// Build-time constants
+declare const __APP_VERSION__: string;
+declare const __BUILD_TIME__: string;

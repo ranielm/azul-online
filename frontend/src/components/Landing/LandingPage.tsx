@@ -347,6 +347,18 @@ export function LandingPage({ onCreateRoom, onJoinRoom }: LandingPageProps) {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Version info */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="mt-6 text-center border-t border-slate-700/50 pt-4"
+        >
+          <p className="text-slate-600 text-xs">
+            v{__APP_VERSION__} • Build {new Date(__BUILD_TIME__).toLocaleDateString('pt-BR')}
+          </p>
+        </motion.div>
       </motion.div>
     </div>
   );
