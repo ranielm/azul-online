@@ -12,8 +12,8 @@ const rooms: Map<string, Room> = new Map();
 // 48 hours in milliseconds
 const ROOM_MAX_AGE_MS = 48 * 60 * 60 * 1000;
 
-export function initializeFromDatabase(): void {
-  const persistedRooms = loadAllRooms();
+export async function initializeFromDatabase(): Promise<void> {
+  const persistedRooms = await loadAllRooms();
 
   for (const room of persistedRooms) {
     // Mark all players as disconnected (server restarted)
@@ -51,7 +51,8 @@ export function createRoom(
   };
 
   rooms.set(id, room);
-  saveRoom(room);
+  // Fire and forget - don't block on DB save
+  saveRoom(room).catch((err) => console.error('Failed to save room:', err));
   return room;
 }
 
@@ -61,12 +62,14 @@ export function getRoom(id: string): Room | undefined {
 
 export function updateRoom(id: string, room: Room): void {
   rooms.set(id, room);
-  saveRoom(room);
+  saveRoom(room).catch((err) => console.error('Failed to save room:', err));
 }
 
 export function deleteRoom(id: string): void {
   rooms.delete(id);
-  deleteRoomFromDb(id);
+  deleteRoomFromDb(id).catch((err) =>
+    console.error('Failed to delete room from DB:', err)
+  );
 }
 
 export function roomExists(id: string): boolean {
@@ -87,7 +90,7 @@ export function addPlayerToRoom(roomId: string, player: Player): Room | null {
 
   room.gameState.players.push(player);
   rooms.set(roomId, room);
-  saveRoom(room);
+  saveRoom(room).catch((err) => console.error('Failed to save room:', err));
   return room;
 }
 
@@ -105,7 +108,9 @@ export function removePlayerFromRoom(
   // If room is empty, delete it
   if (room.gameState.players.length === 0) {
     rooms.delete(roomId);
-    deleteRoomFromDb(roomId);
+    deleteRoomFromDb(roomId).catch((err) =>
+      console.error('Failed to delete room from DB:', err)
+    );
     return null;
   }
 
@@ -116,7 +121,7 @@ export function removePlayerFromRoom(
   }
 
   rooms.set(roomId, room);
-  saveRoom(room);
+  saveRoom(room).catch((err) => console.error('Failed to save room:', err));
   return room;
 }
 
@@ -129,7 +134,7 @@ export function updateGameState(
 
   room.gameState = gameState;
   rooms.set(roomId, room);
-  saveRoom(room);
+  saveRoom(room).catch((err) => console.error('Failed to save room:', err));
   return room;
 }
 
@@ -147,7 +152,7 @@ export function setPlayerConnected(
   }
 
   rooms.set(roomId, room);
-  saveRoom(room);
+  saveRoom(room).catch((err) => console.error('Failed to save room:', err));
   return room;
 }
 
@@ -156,7 +161,7 @@ export function getAllRooms(): Room[] {
 }
 
 // Clean up stale rooms (no activity for 48 hours with all players disconnected)
-export function cleanupStaleRooms(): void {
+export async function cleanupStaleRooms(): Promise<void> {
   const cutoffTime = new Date(Date.now() - ROOM_MAX_AGE_MS);
 
   for (const [id, room] of rooms.entries()) {
@@ -167,18 +172,22 @@ export function cleanupStaleRooms(): void {
       );
       if (allDisconnected) {
         rooms.delete(id);
-        deleteRoomFromDb(id);
+        await deleteRoomFromDb(id);
         console.log(`Cleaned up stale room: ${id}`);
       }
     }
   }
 
   // Also cleanup from database directly (in case of missed in-memory rooms)
-  const cleaned = cleanupStaleRoomsFromDb(ROOM_MAX_AGE_MS);
+  const cleaned = await cleanupStaleRoomsFromDb(ROOM_MAX_AGE_MS);
   if (cleaned > 0) {
     console.log(`Cleaned up ${cleaned} stale rooms from database`);
   }
 }
 
 // Run cleanup every 15 minutes
-setInterval(cleanupStaleRooms, 15 * 60 * 1000);
+setInterval(() => {
+  cleanupStaleRooms().catch((err) =>
+    console.error('Failed to cleanup stale rooms:', err)
+  );
+}, 15 * 60 * 1000);

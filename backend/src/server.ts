@@ -6,28 +6,35 @@ import { setupSocketHandlers } from './socket/handlers';
 import { initDatabase } from './persistence/database';
 import { initializeFromDatabase } from './room/store';
 
-export function createServer() {
+export async function createServer() {
   // Initialize database and load persisted rooms
-  initDatabase();
-  initializeFromDatabase();
+  await initDatabase();
+  await initializeFromDatabase();
 
   const app = express();
   const httpServer = createHttpServer(app);
 
   // Support multiple CORS origins (comma-separated in env var)
   const corsOriginEnv = process.env.CORS_ORIGIN || 'http://localhost:5173';
-  const corsOrigins = corsOriginEnv.split(',').map(origin => origin.trim());
+  const corsOrigins = corsOriginEnv.split(',').map((origin) => origin.trim());
 
   // CORS configuration for production
   const corsOptions = {
-    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    origin: (
+      origin: string | undefined,
+      callback: (err: Error | null, allow?: boolean) => void
+    ) => {
       // Allow requests with no origin (mobile apps, curl, etc.)
       if (!origin) {
         callback(null, true);
         return;
       }
       // Check if origin is in allowed list
-      if (corsOrigins.some(allowed => origin.startsWith(allowed) || allowed === '*')) {
+      if (
+        corsOrigins.some(
+          (allowed) => origin.startsWith(allowed) || allowed === '*'
+        )
+      ) {
         callback(null, true);
       } else {
         console.log(`CORS blocked origin: ${origin}`);

@@ -13,7 +13,10 @@
       "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat\\(frontend\\): add i18n support with PT-BR and EN-US languages\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(git commit:*)",
       "Bash(vercel --version:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(ls -la \"C:\\\\Users\\\\rdpuser\\\\Documents\\\\azul-online\\\\frontend\"\" | findstr /i \"env \")",
+      "Bash(npm install:*)",
+      "Bash(npm uninstall:*)"
     ]
   }
 }
