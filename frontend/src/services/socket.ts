@@ -18,21 +18,36 @@ class SocketService {
   private listeners: Map<string, Set<(...args: unknown[]) => void>> = new Map();
 
   connect(): Socket {
+    // Return existing socket if already connected
     if (this.socket?.connected) {
+      return this.socket;
+    }
+
+    // If socket exists but not connected, just return it (it will auto-reconnect)
+    if (this.socket) {
       return this.socket;
     }
 
     this.socket = io(SOCKET_URL, {
       transports: ['websocket', 'polling'],
       autoConnect: true,
+      reconnection: true,
+      reconnectionAttempts: Infinity,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      timeout: 20000,
     });
 
     this.socket.on('connect', () => {
       console.log('Connected to server');
+      // Re-register all listeners after reconnection
+      this.reattachListeners();
+      // Try to reconnect to room if we have stored session
+      this.tryAutoReconnect();
     });
 
-    this.socket.on('disconnect', () => {
-      console.log('Disconnected from server');
+    this.socket.on('disconnect', (reason) => {
+      console.log('Disconnected from server:', reason);
     });
 
     this.socket.on('connect_error', (error) => {
@@ -40,6 +55,27 @@ class SocketService {
     });
 
     return this.socket;
+  }
+
+  private reattachListeners(): void {
+    // Re-attach all stored listeners to the socket after reconnection
+    for (const [event, callbacks] of this.listeners.entries()) {
+      for (const callback of callbacks) {
+        // Remove first to avoid duplicates, then add
+        this.socket?.off(event, callback);
+        this.socket?.on(event, callback);
+      }
+    }
+  }
+
+  private tryAutoReconnect(): void {
+    // Try to reconnect to room if we have stored session
+    const storedRoomId = localStorage.getItem('azul-room-id');
+    const storedPlayerId = localStorage.getItem('azul-player-id');
+    if (storedRoomId && storedPlayerId) {
+      console.log('Attempting to reconnect to room:', storedRoomId);
+      this.reconnect(storedRoomId, storedPlayerId);
+    }
   }
 
   disconnect(): void {

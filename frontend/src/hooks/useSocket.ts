@@ -117,12 +117,7 @@ export function useSocket() {
       localStorage.setItem('azul-room-id', room.id);
     });
 
-    // Try to reconnect if we have stored session (now using localStorage for persistence)
-    const storedRoomId = localStorage.getItem('azul-room-id');
-    const storedPlayerId = localStorage.getItem('azul-player-id');
-    if (storedRoomId && storedPlayerId) {
-      socketService.reconnect(storedRoomId, storedPlayerId);
-    }
+    // Note: Auto-reconnect is now handled by socketService on connect event
 
     return () => {
       socketService.disconnect();
