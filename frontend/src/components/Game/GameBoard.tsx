@@ -4,6 +4,7 @@ import { GameState, TileSelection, PlayerMove } from '@shared/types';
 import { Board } from '../Board/Board';
 import { FactoryDisplay } from '../Factory/FactoryDisplay';
 import { GameControls } from './GameControls';
+import { PenaltyNotifications } from './PenaltyNotification';
 import { useTranslation } from '../../i18n/useLanguage';
 
 interface GameBoardProps {
@@ -114,6 +115,9 @@ export function GameBoard({
           </div>
         </div>
       </div>
+
+      {/* Penalty Notifications */}
+      <PenaltyNotifications gameState={gameState} players={gameState.players} />
     </div>
   );
 }

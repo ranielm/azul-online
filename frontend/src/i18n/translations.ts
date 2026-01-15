@@ -117,6 +117,15 @@ export const translations = {
     changeCodeDescription: 'Digite um novo código de 6 caracteres (letras e números)',
     codeChanged: 'Código alterado!',
     invalidCode: 'Código inválido. Use 6 caracteres alfanuméricos.',
+
+    // Penalty Notifications
+    penaltyOverflow: (name: string, count: number) =>
+      `${name} colocou ${count} peça(s) no chão (linha cheia)`,
+    penaltyFloorChoice: (name: string, count: number) =>
+      `${name} colocou ${count} peça(s) no chão`,
+    penaltyFirstPlayer: (name: string) =>
+      `${name} pegou o marcador de primeiro jogador (-1)`,
+    penalty: 'Penalidade',
   },
   'en-US': {
     // Home
@@ -234,6 +243,15 @@ export const translations = {
     changeCodeDescription: 'Enter a new 6-character code (letters and numbers)',
     codeChanged: 'Code changed!',
     invalidCode: 'Invalid code. Use 6 alphanumeric characters.',
+
+    // Penalty Notifications
+    penaltyOverflow: (name: string, count: number) =>
+      `${name} placed ${count} tile(s) on floor (line full)`,
+    penaltyFloorChoice: (name: string, count: number) =>
+      `${name} placed ${count} tile(s) on floor`,
+    penaltyFirstPlayer: (name: string) =>
+      `${name} took the first player marker (-1)`,
+    penalty: 'Penalty',
   },
 } as const;
 
