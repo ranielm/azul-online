@@ -1,7 +1,9 @@
-import { createClient, Client } from '@libsql/client';
+import Database from 'better-sqlite3';
 import { Room } from '../shared/types';
+import path from 'path';
+import fs from 'fs';
 
-let db: Client | null = null;
+let db: Database.Database | null = null;
 
 interface RoomRow {
   id: string;
@@ -11,22 +13,22 @@ interface RoomRow {
 }
 
 export async function initDatabase(): Promise<void> {
-  const url = process.env.TURSO_DATABASE_URL;
-  const authToken = process.env.TURSO_AUTH_TOKEN;
+  // Use environment variable or default to local file
+  const dbPath = process.env.DATABASE_PATH || path.join(process.cwd(), 'data', 'azul.db');
 
-  if (!url || !authToken) {
-    console.warn('Turso credentials not configured. Database persistence disabled.');
-    console.warn('Set TURSO_DATABASE_URL and TURSO_AUTH_TOKEN environment variables.');
-    return;
+  // Ensure data directory exists
+  const dataDir = path.dirname(dbPath);
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
   }
 
-  db = createClient({
-    url,
-    authToken,
-  });
+  db = new Database(dbPath);
+
+  // Enable WAL mode for better performance
+  db.pragma('journal_mode = WAL');
 
   // Create tables
-  await db.execute(`
+  db.exec(`
     CREATE TABLE IF NOT EXISTS rooms (
       id TEXT PRIMARY KEY,
       data TEXT NOT NULL,
@@ -35,11 +37,11 @@ export async function initDatabase(): Promise<void> {
     )
   `);
 
-  await db.execute(`
+  db.exec(`
     CREATE INDEX IF NOT EXISTS idx_rooms_updated_at ON rooms(updated_at)
   `);
 
-  console.log('Turso database initialized');
+  console.log(`SQLite database initialized at ${dbPath}`);
 }
 
 export async function saveRoom(room: Room): Promise<void> {
@@ -52,10 +54,12 @@ export async function saveRoom(room: Room): Promise<void> {
       ? room.createdAt.getTime()
       : new Date(room.createdAt).getTime();
 
-  await db.execute({
-    sql: `INSERT OR REPLACE INTO rooms (id, data, created_at, updated_at) VALUES (?, ?, ?, ?)`,
-    args: [room.id, JSON.stringify(room), createdAt, Date.now()],
-  });
+  const stmt = db.prepare(`
+    INSERT OR REPLACE INTO rooms (id, data, created_at, updated_at)
+    VALUES (?, ?, ?, ?)
+  `);
+
+  stmt.run(room.id, JSON.stringify(room), createdAt, Date.now());
 }
 
 export async function loadRoom(id: string): Promise<Room | null> {
@@ -63,14 +67,11 @@ export async function loadRoom(id: string): Promise<Room | null> {
     return null;
   }
 
-  const result = await db.execute({
-    sql: 'SELECT data FROM rooms WHERE id = ?',
-    args: [id],
-  });
+  const stmt = db.prepare('SELECT data FROM rooms WHERE id = ?');
+  const row = stmt.get(id) as RoomRow | undefined;
 
-  if (result.rows.length === 0) return null;
+  if (!row) return null;
 
-  const row = result.rows[0] as unknown as RoomRow;
   const room = JSON.parse(row.data) as Room;
   room.createdAt = new Date(room.createdAt);
   return room;
@@ -81,10 +82,8 @@ export async function deleteRoomFromDb(id: string): Promise<void> {
     return;
   }
 
-  await db.execute({
-    sql: 'DELETE FROM rooms WHERE id = ?',
-    args: [id],
-  });
+  const stmt = db.prepare('DELETE FROM rooms WHERE id = ?');
+  stmt.run(id);
 }
 
 export async function loadAllRooms(): Promise<Room[]> {
@@ -92,11 +91,11 @@ export async function loadAllRooms(): Promise<Room[]> {
     return [];
   }
 
-  const result = await db.execute('SELECT data FROM rooms');
+  const stmt = db.prepare('SELECT data FROM rooms');
+  const rows = stmt.all() as RoomRow[];
 
-  return result.rows.map((row) => {
-    const roomRow = row as unknown as RoomRow;
-    const room = JSON.parse(roomRow.data) as Room;
+  return rows.map((row) => {
+    const room = JSON.parse(row.data) as Room;
     room.createdAt = new Date(room.createdAt);
     return room;
   });
@@ -108,12 +107,10 @@ export async function cleanupStaleRoomsFromDb(maxAgeMs: number): Promise<number>
   }
 
   const cutoff = Date.now() - maxAgeMs;
-  const result = await db.execute({
-    sql: 'DELETE FROM rooms WHERE updated_at < ?',
-    args: [cutoff],
-  });
+  const stmt = db.prepare('DELETE FROM rooms WHERE updated_at < ?');
+  const result = stmt.run(cutoff);
 
-  return result.rowsAffected;
+  return result.changes;
 }
 
 export function closeDatabase(): void {
