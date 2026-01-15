@@ -230,3 +230,47 @@ export function reconnectPlayer(
 
   return { success: true, room };
 }
+
+export function changeRoomCode(
+  roomId: string,
+  newRoomId: string,
+  playerId: string
+): { success: boolean; room?: Room; oldRoomId?: string; error?: string } {
+  const room = store.getRoom(roomId);
+
+  if (!room) {
+    return { success: false, error: 'Room not found' };
+  }
+
+  // Check if player is the host
+  const player = room.gameState.players.find((p) => p.id === playerId);
+  if (!player?.isHost) {
+    return { success: false, error: 'Only the host can change the room code' };
+  }
+
+  // Can only change code in waiting phase
+  if (room.gameState.phase !== 'waiting') {
+    return { success: false, error: 'Cannot change room code after game has started' };
+  }
+
+  // Validate new room ID format (6 alphanumeric characters)
+  const validFormat = /^[A-Z0-9]{6}$/;
+  const normalizedNewId = newRoomId.toUpperCase();
+  if (!validFormat.test(normalizedNewId)) {
+    return { success: false, error: 'Room code must be 6 alphanumeric characters' };
+  }
+
+  // Check if new code is already in use
+  if (store.roomExists(normalizedNewId)) {
+    return { success: false, error: 'Room code already in use' };
+  }
+
+  const oldRoomId = roomId;
+  const updatedRoom = store.changeRoomId(roomId, normalizedNewId);
+
+  if (!updatedRoom) {
+    return { success: false, error: 'Failed to change room code' };
+  }
+
+  return { success: true, room: updatedRoom, oldRoomId };
+}

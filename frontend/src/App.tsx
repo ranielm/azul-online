@@ -20,7 +20,7 @@ function App() {
   const [initialRoomId, setInitialRoomId] = useState<string>('');
   const [selectedTiles, setSelectedTiles] = useState<TileSelection | null>(null);
 
-  const { createRoom, joinRoom, leaveRoom, startGame, makeMove, restartGame } =
+  const { createRoom, joinRoom, leaveRoom, startGame, makeMove, restartGame, changeRoomCode } =
     useSocket();
 
   const { room, gameState, playerId, error, clearError, isConnected } =
@@ -166,6 +166,7 @@ function App() {
               playerId={playerId}
               onStartGame={startGame}
               onLeaveRoom={handleLeaveRoom}
+              onChangeCode={changeRoomCode}
             />
           </motion.div>
         )}

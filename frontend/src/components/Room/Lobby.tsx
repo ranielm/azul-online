@@ -10,10 +10,14 @@ interface LobbyProps {
   playerId: string;
   onStartGame: () => void;
   onLeaveRoom: () => void;
+  onChangeCode?: (newCode: string) => void;
 }
 
-export function Lobby({ room, playerId, onStartGame, onLeaveRoom }: LobbyProps) {
+export function Lobby({ room, playerId, onStartGame, onLeaveRoom, onChangeCode }: LobbyProps) {
   const [copied, setCopied] = useState(false);
+  const [showChangeCode, setShowChangeCode] = useState(false);
+  const [newCode, setNewCode] = useState('');
+  const [codeError, setCodeError] = useState('');
   const currentPlayer = room.gameState.players.find((p) => p.id === playerId);
   const isHost = currentPlayer?.isHost;
   const canStart = room.gameState.players.length >= 2;
@@ -26,6 +30,23 @@ export function Lobby({ room, playerId, onStartGame, onLeaveRoom }: LobbyProps) 
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
+    }
+  };
+
+  const handleChangeCode = () => {
+    const normalizedCode = newCode.toUpperCase().trim();
+    const validFormat = /^[A-Z0-9]{6}$/;
+
+    if (!validFormat.test(normalizedCode)) {
+      setCodeError(t.invalidCode);
+      return;
+    }
+
+    if (onChangeCode) {
+      onChangeCode(normalizedCode);
+      setShowChangeCode(false);
+      setNewCode('');
+      setCodeError('');
     }
   };
 
@@ -47,8 +68,69 @@ export function Lobby({ room, playerId, onStartGame, onLeaveRoom }: LobbyProps) 
           <Button size="sm" variant="ghost" onClick={handleCopyLink}>
             {copied ? t.copied : t.copyLink}
           </Button>
+          {isHost && onChangeCode && (
+            <Button size="sm" variant="ghost" onClick={() => setShowChangeCode(true)}>
+              {t.changeCode}
+            </Button>
+          )}
         </div>
       </div>
+
+      {/* Change Code Modal */}
+      {showChangeCode && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          onClick={() => setShowChangeCode(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-slate-800 rounded-xl p-6 w-full max-w-sm mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-xl font-bold mb-4">{t.changeCodeTitle}</h3>
+            <p className="text-slate-400 text-sm mb-4">{t.changeCodeDescription}</p>
+            <input
+              type="text"
+              value={newCode}
+              onChange={(e) => {
+                setNewCode(e.target.value.toUpperCase().slice(0, 6));
+                setCodeError('');
+              }}
+              placeholder={t.enterNewRoomCode}
+              className="w-full px-4 py-3 bg-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-center text-2xl tracking-widest uppercase mb-2"
+              maxLength={6}
+              autoFocus
+            />
+            {codeError && (
+              <p className="text-red-400 text-sm mb-4">{codeError}</p>
+            )}
+            <div className="flex gap-3 mt-4">
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setShowChangeCode(false);
+                  setNewCode('');
+                  setCodeError('');
+                }}
+                className="flex-1"
+              >
+                {t.cancel}
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleChangeCode}
+                disabled={newCode.length !== 6}
+                className="flex-1"
+              >
+                {t.confirm}
+              </Button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
 
       {/* Players List */}
       <div className="mb-6">

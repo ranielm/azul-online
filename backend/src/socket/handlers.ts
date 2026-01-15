@@ -6,6 +6,7 @@ import {
   GameMovePayload,
   RoomIdPayload,
   ReconnectPayload,
+  ChangeRoomCodePayload,
 } from '../shared/types';
 import { isValidPlayerName } from '../shared/validation';
 
@@ -141,6 +142,39 @@ export function setupSocketHandlers(io: Server): void {
       socket.to(roomId).emit('room:updated', { room: result.room });
 
       console.log(`Player reconnected to room ${roomId}`);
+    });
+
+    // Change room code
+    socket.on('room:change-code', (payload: ChangeRoomCodePayload) => {
+      const { roomId, newRoomId } = payload;
+
+      const result = roomManager.changeRoomCode(roomId, newRoomId, socket.id);
+
+      if (!result.success || !result.room) {
+        socket.emit('room:error', { message: result.error || 'Failed to change room code' });
+        return;
+      }
+
+      // Move all sockets from old room to new room
+      const oldRoomId = result.oldRoomId!;
+      const newRoom = result.room;
+
+      // Update socketRooms map for all players in this room
+      for (const player of newRoom.gameState.players) {
+        socketRooms.set(player.id, newRoom.id);
+      }
+
+      // Leave old room and join new room for this socket
+      socket.leave(oldRoomId);
+      socket.join(newRoom.id);
+
+      // Notify all players about the room code change
+      io.to(newRoom.id).emit('room:code-changed', { room: newRoom, oldRoomId });
+
+      // Also emit to old room in case any sockets are still there
+      io.to(oldRoomId).emit('room:code-changed', { room: newRoom, oldRoomId });
+
+      console.log(`Room code changed from ${oldRoomId} to ${newRoom.id}`);
     });
 
     // Handle disconnection

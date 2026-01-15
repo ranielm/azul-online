@@ -108,6 +108,15 @@ export const translations = {
     stay: 'Ficar',
     cancel: 'Cancelar',
     confirm: 'Confirmar',
+
+    // Change Room Code
+    changeCode: 'Mudar Código',
+    changeCodeTitle: 'Mudar Código da Sala',
+    newRoomCode: 'Novo Código',
+    enterNewRoomCode: 'Digite o novo código (6 caracteres)',
+    changeCodeDescription: 'Digite um novo código de 6 caracteres (letras e números)',
+    codeChanged: 'Código alterado!',
+    invalidCode: 'Código inválido. Use 6 caracteres alfanuméricos.',
   },
   'en-US': {
     // Home
@@ -216,6 +225,15 @@ export const translations = {
     stay: 'Stay',
     cancel: 'Cancel',
     confirm: 'Confirm',
+
+    // Change Room Code
+    changeCode: 'Change Code',
+    changeCodeTitle: 'Change Room Code',
+    newRoomCode: 'New Code',
+    enterNewRoomCode: 'Enter new code (6 characters)',
+    changeCodeDescription: 'Enter a new 6-character code (letters and numbers)',
+    codeChanged: 'Code changed!',
+    invalidCode: 'Invalid code. Use 6 alphanumeric characters.',
   },
 } as const;
 

@@ -94,6 +94,10 @@ class SocketService {
     this.socket?.emit('player:reconnect', payload);
   }
 
+  changeRoomCode(roomId: string, newRoomId: string): void {
+    this.socket?.emit('room:change-code', { roomId, newRoomId });
+  }
+
   // Event listeners
   on<T>(event: string, callback: (data: T) => void): void {
     this.socket?.on(event, callback as (...args: unknown[]) => void);
@@ -163,6 +167,10 @@ class SocketService {
 
   onPlayerDisconnected(callback: (data: { playerId: string }) => void): void {
     this.on('player:disconnected', callback);
+  }
+
+  onRoomCodeChanged(callback: (data: { room: Room; oldRoomId: string }) => void): void {
+    this.on('room:code-changed', callback);
   }
 }
 

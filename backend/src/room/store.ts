@@ -160,6 +160,30 @@ export function getAllRooms(): Room[] {
   return Array.from(rooms.values());
 }
 
+export function changeRoomId(oldId: string, newId: string): Room | null {
+  const room = rooms.get(oldId);
+  if (!room) return null;
+
+  // Check if new ID is already taken
+  if (rooms.has(newId)) return null;
+
+  // Update the room ID
+  room.id = newId;
+  room.gameState.id = newId;
+
+  // Remove old entry and add new one
+  rooms.delete(oldId);
+  rooms.set(newId, room);
+
+  // Update database
+  deleteRoomFromDb(oldId).catch((err) =>
+    console.error('Failed to delete old room from DB:', err)
+  );
+  saveRoom(room).catch((err) => console.error('Failed to save room:', err));
+
+  return room;
+}
+
 // Clean up stale rooms (no activity for 48 hours with all players disconnected)
 export async function cleanupStaleRooms(): Promise<void> {
   const cutoffTime = new Date(Date.now() - ROOM_MAX_AGE_MS);

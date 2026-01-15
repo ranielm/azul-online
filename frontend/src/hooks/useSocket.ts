@@ -111,6 +111,12 @@ export function useSocket() {
       });
     });
 
+    socketService.onRoomCodeChanged(({ room }) => {
+      setRoom(room);
+      // Update localStorage with new room ID
+      localStorage.setItem('azul-room-id', room.id);
+    });
+
     // Try to reconnect if we have stored session (now using localStorage for persistence)
     const storedRoomId = localStorage.getItem('azul-room-id');
     const storedPlayerId = localStorage.getItem('azul-player-id');
@@ -163,6 +169,15 @@ export function useSocket() {
     }
   }, [room]);
 
+  const changeRoomCode = useCallback(
+    (newRoomId: string) => {
+      if (room) {
+        socketService.changeRoomCode(room.id, newRoomId);
+      }
+    },
+    [room]
+  );
+
   return {
     createRoom,
     joinRoom,
@@ -170,5 +185,6 @@ export function useSocket() {
     startGame,
     makeMove,
     restartGame,
+    changeRoomCode,
   };
 }

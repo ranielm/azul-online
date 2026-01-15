@@ -135,6 +135,11 @@ export interface ReconnectPayload {
   playerId: string;
 }
 
+export interface ChangeRoomCodePayload {
+  roomId: string;
+  newRoomId: string;
+}
+
 // Socket response payloads
 export interface RoomCreatedResponse {
   room: Room;
