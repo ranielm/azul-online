@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --tile-blue: #006DB2;
-  --tile-yellow: #E6A745;
-  --tile-red: #D93844;
-  --tile-black: #606C76;
-  --tile-white: #E8F1F2;
+  --tile-blue: #1e40af;
+  --tile-yellow: #d97706;
+  --tile-red: #dc2626;
+  --tile-black: #374151;
+  --tile-white: #ffffff;
 }
 
 body {
@@ -71,36 +71,189 @@ body {
   @apply transform scale-110;
 }
 
-/* Portuguese Tile Palette - Ceramic/Resin look */
+/* Azulejos Portugueses Autênticos - Texturas Elaboradas */
 .tile-blue {
-  background: linear-gradient(145deg, #0080CC 0%, #005A99 100%);
-  box-shadow: 0 2px 6px rgba(0, 109, 178, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  background: linear-gradient(145deg, #1e40af 0%, #1e3a8a 100%);
+  position: relative;
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(30, 58, 138, 0.8);
+}
+
+.tile-blue::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background-image: 
+    /* Floco central grande */
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.9) 2px, transparent 3px),
+    /* Pétalas do floco */
+    conic-gradient(from 0deg at 50% 50%, 
+      transparent 0deg, rgba(255, 255, 255, 0.7) 15deg, transparent 30deg,
+      transparent 60deg, rgba(255, 255, 255, 0.7) 75deg, transparent 90deg,
+      transparent 120deg, rgba(255, 255, 255, 0.7) 135deg, transparent 150deg,
+      transparent 180deg, rgba(255, 255, 255, 0.7) 195deg, transparent 210deg,
+      transparent 240deg, rgba(255, 255, 255, 0.7) 255deg, transparent 270deg,
+      transparent 300deg, rgba(255, 255, 255, 0.7) 315deg, transparent 330deg),
+    /* Pontos decorativos nos cantos */
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.6) 1px, transparent 2px),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.6) 1px, transparent 2px),
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.6) 1px, transparent 2px),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.6) 1px, transparent 2px);
+  background-size: 100% 100%;
+  border-radius: inherit;
+  pointer-events: none;
 }
 
 .tile-yellow {
-  background: linear-gradient(145deg, #F0B652 0%, #CC8F38 100%);
-  box-shadow: 0 2px 6px rgba(230, 167, 69, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  background: linear-gradient(145deg, #d97706 0%, #b45309 100%);
+  position: relative;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(180, 83, 9, 0.8);
+}
+
+.tile-yellow::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background-image: 
+    /* Padrão de losangos */
+    repeating-conic-gradient(from 45deg at 50% 50%,
+      rgba(0, 0, 0, 0.3) 0deg, rgba(0, 0, 0, 0.3) 45deg,
+      transparent 45deg, transparent 90deg),
+    /* Linhas cruzadas */
+    repeating-linear-gradient(45deg, 
+      transparent 0px, transparent 3px,
+      rgba(0, 0, 0, 0.2) 3px, rgba(0, 0, 0, 0.2) 4px,
+      transparent 4px, transparent 8px),
+    repeating-linear-gradient(-45deg, 
+      transparent 0px, transparent 3px,
+      rgba(0, 0, 0, 0.2) 3px, rgba(0, 0, 0, 0.2) 4px,
+      transparent 4px, transparent 8px),
+    /* Pontos centrais */
+    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.4) 1px, transparent 2px);
+  background-size: 16px 16px, 8px 8px, 8px 8px, 100% 100%;
+  border-radius: inherit;
+  pointer-events: none;
 }
 
 .tile-red {
-  background: linear-gradient(145deg, #E84550 0%, #BF2D38 100%);
-  box-shadow: 0 2px 6px rgba(217, 56, 68, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  background: linear-gradient(145deg, #dc2626 0%, #991b1b 100%);
+  position: relative;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(153, 27, 27, 0.8);
+}
+
+.tile-red::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background-image: 
+    /* Brilho cerâmico sutil */
+    radial-gradient(ellipse at 30% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+    /* Textura de cerâmica */
+    repeating-linear-gradient(90deg, 
+      transparent 0px, rgba(255, 255, 255, 0.05) 1px, transparent 2px);
+  border-radius: inherit;
+  pointer-events: none;
 }
 
 .tile-black {
-  background: linear-gradient(145deg, #3D444D 0%, #1F252B 100%);
-  box-shadow: 0 2px 6px rgba(31, 37, 43, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background: linear-gradient(145deg, #374151 0%, #111827 100%);
+  position: relative;
+  box-shadow: 0 4px 12px rgba(17, 24, 39, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(17, 24, 39, 0.9);
+}
+
+.tile-black::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background-image: 
+    /* Padrão geométrico complexo */
+    repeating-linear-gradient(0deg, 
+      rgba(255, 255, 255, 0.15) 0px, rgba(255, 255, 255, 0.15) 1px, 
+      transparent 1px, transparent 6px),
+    repeating-linear-gradient(90deg, 
+      rgba(255, 255, 255, 0.15) 0px, rgba(255, 255, 255, 0.15) 1px, 
+      transparent 1px, transparent 6px),
+    repeating-linear-gradient(45deg, 
+      rgba(255, 255, 255, 0.08) 0px, rgba(255, 255, 255, 0.08) 1px, 
+      transparent 1px, transparent 8px),
+    repeating-linear-gradient(-45deg, 
+      rgba(255, 255, 255, 0.08) 0px, rgba(255, 255, 255, 0.08) 1px, 
+      transparent 1px, transparent 8px),
+    /* Pontos de intersecção */
+    radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.2) 0.5px, transparent 1px),
+    radial-gradient(circle at 75% 25%, rgba(255, 255, 255, 0.2) 0.5px, transparent 1px),
+    radial-gradient(circle at 25% 75%, rgba(255, 255, 255, 0.2) 0.5px, transparent 1px),
+    radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.2) 0.5px, transparent 1px);
+  background-size: 100% 100%;
+  border-radius: inherit;
+  pointer-events: none;
 }
 
 .tile-white {
-  background: linear-gradient(145deg, #F2F8F9 0%, #D8E4E6 100%);
-  box-shadow: 0 2px 6px rgba(232, 241, 242, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  @apply border border-slate-500/30;
+  background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+  position: relative;
+  box-shadow: 0 4px 12px rgba(148, 163, 184, 0.3), inset 0 2px 4px rgba(59, 130, 246, 0.1);
+  border: 2px solid rgba(59, 130, 246, 0.3);
+}
+
+.tile-white::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  background-image: 
+    /* Floco central azul */
+    radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.8) 2px, transparent 3px),
+    /* Pétalas do floco em azul */
+    conic-gradient(from 0deg at 50% 50%, 
+      transparent 0deg, rgba(59, 130, 246, 0.6) 15deg, transparent 30deg,
+      transparent 60deg, rgba(59, 130, 246, 0.6) 75deg, transparent 90deg,
+      transparent 120deg, rgba(59, 130, 246, 0.6) 135deg, transparent 150deg,
+      transparent 180deg, rgba(59, 130, 246, 0.6) 195deg, transparent 210deg,
+      transparent 240deg, rgba(59, 130, 246, 0.6) 255deg, transparent 270deg,
+      transparent 300deg, rgba(59, 130, 246, 0.6) 315deg, transparent 330deg),
+    /* Ornamentos nos cantos */
+    radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.5) 1px, transparent 2px),
+    radial-gradient(circle at 85% 15%, rgba(59, 130, 246, 0.5) 1px, transparent 2px),
+    radial-gradient(circle at 15% 85%, rgba(59, 130, 246, 0.5) 1px, transparent 2px),
+    radial-gradient(circle at 85% 85%, rgba(59, 130, 246, 0.5) 1px, transparent 2px),
+    /* Linhas decorativas sutis */
+    repeating-linear-gradient(45deg, 
+      transparent 0px, rgba(59, 130, 246, 0.1) 8px, transparent 10px);
+  background-size: 100% 100%;
+  border-radius: inherit;
+  pointer-events: none;
 }
 
 .tile-first-player {
-  @apply bg-gradient-to-br from-teal-500 to-teal-600 text-white flex items-center justify-center text-xs font-bold;
-  box-shadow: 0 2px 6px rgba(20, 184, 166, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  background: linear-gradient(145deg, #0891b2 0%, #0e7490 100%);
+  position: relative;
+  color: white;
+  box-shadow: 0 4px 12px rgba(8, 145, 178, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(14, 116, 144, 0.8);
+}
+
+.tile-first-player::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background-image: 
+    /* Padrão radiante */
+    conic-gradient(from 0deg at 50% 50%, 
+      rgba(255, 255, 255, 0.3) 0deg, transparent 45deg,
+      rgba(255, 255, 255, 0.3) 90deg, transparent 135deg,
+      rgba(255, 255, 255, 0.3) 180deg, transparent 225deg,
+      rgba(255, 255, 255, 0.3) 270deg, transparent 315deg),
+    /* Círculos concêntricos */
+    radial-gradient(circle at 50% 50%, 
+      transparent 30%, rgba(255, 255, 255, 0.2) 35%, 
+      transparent 40%, rgba(255, 255, 255, 0.1) 60%, transparent 65%);
+  background-size: 100% 100%;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
 }
 
 .factory {
