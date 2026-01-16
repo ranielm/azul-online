@@ -103,6 +103,21 @@ body {
   box-shadow: 0 2px 6px rgba(20, 184, 166, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
+/* Peças não completadas na parede - estilo diferente das linhas de padrão */
+.tile-empty {
+  border: 2px dashed rgba(100, 116, 139, 0.6) !important;
+  opacity: 0.4;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.4) !important;
+  filter: grayscale(0.3);
+}
+
+/* Peças completadas - destaque sutil mas visível */
+.tile-completed {
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.12), 0 2px 4px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  filter: brightness(1.05);
+}
+
 .factory {
   @apply bg-slate-700 rounded-lg p-3 shadow-lg grid grid-cols-2 gap-2;
 }

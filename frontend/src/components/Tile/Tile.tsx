@@ -54,9 +54,9 @@ export function Tile({
         ${colorClass}
         ${selected ? 'ring-2 ring-yellow-400 ring-offset-2 ring-offset-slate-800' : ''}
         ${onClick && !disabled ? 'cursor-pointer' : 'cursor-default'}
-        ${disabled && !wasCompleted ? 'opacity-50' : ''}
+        ${disabled && !wasCompleted ? 'tile-empty' : ''}
         ${showPattern ? 'opacity-30' : ''}
-        ${wasCompleted ? '' : ''}
+        ${wasCompleted ? 'tile-completed' : ''}
         rounded-sm shadow-md transition-all duration-150
         flex items-center justify-center
       `}
