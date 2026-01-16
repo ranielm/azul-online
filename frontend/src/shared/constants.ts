@@ -46,9 +46,9 @@ export const TILE_COLOR_CLASSES: Record<TileColor, string> = {
 
 // Tile color to hex color mapping
 export const TILE_COLOR_HEX: Record<TileColor, string> = {
-  blue: '#3B82F6',
-  yellow: '#FACC15',
-  red: '#EF4444',
-  black: '#1F2937',
-  white: '#FFFFFF',
+  blue: '#1e40af',
+  yellow: '#d97706',
+  red: '#dc2626',
+  black: '#374151',
+  white: '#ffffff',
 };
