@@ -54,6 +54,20 @@ export async function createServer() {
   app.use(cors(corsOptions));
   app.use(express.json());
 
+  // Debug Middleware for Auth
+  app.use("/api/auth/*", (req, res, next) => {
+    console.log("DEBUG: Auth Request", {
+      originalUrl: req.originalUrl,
+      baseUrl: req.baseUrl,
+      path: req.path,
+      url: req.url,
+      params: req.params,
+      host: req.get('host'),
+      protocol: req.protocol
+    });
+    next();
+  });
+
   // Auth.js Middleware
   app.use("/api/auth/*", ExpressAuth(authConfig));
 
