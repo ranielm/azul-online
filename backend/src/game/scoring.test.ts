@@ -20,7 +20,8 @@ function createWall(): WallCell[][] {
             const colorIndex = (c - r + 5) % 5;
             row.push({
                 color: colors[colorIndex],
-                filled: false
+                filled: false,
+                wasCompleted: false
             });
         }
         wall.push(row);
