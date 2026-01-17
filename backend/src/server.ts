@@ -55,7 +55,7 @@ export async function createServer() {
   app.use(express.json());
 
   // Debug Middleware for Auth
-  app.use("/api/auth/*", (req, res, next) => {
+  app.use("/api/auth", (req, res, next) => {
     console.log("DEBUG: Auth Request", {
       originalUrl: req.originalUrl,
       baseUrl: req.baseUrl,
@@ -69,7 +69,7 @@ export async function createServer() {
   });
 
   // Auth.js Middleware
-  app.use("/api/auth/*", ExpressAuth(authConfig));
+  app.use("/api/auth", ExpressAuth(authConfig));
 
   // Health check endpoint
   app.get('/api/health', (req, res) => {

@@ -99,4 +99,5 @@ export const authConfig = {
     adapter: LibSQLAdapter(),
     secret: process.env.AUTH_SECRET,
     trustHost: true,
+    basePath: '/api/auth',
 };
