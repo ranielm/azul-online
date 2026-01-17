@@ -10,6 +10,7 @@ interface TileProps {
   disabled?: boolean;
   size?: 'sm' | 'md' | 'lg';
   showPattern?: boolean;
+  wasCompleted?: boolean;
 }
 
 export function Tile({
@@ -19,6 +20,7 @@ export function Tile({
   disabled = false,
   size = 'md',
   showPattern = false,
+  wasCompleted = false,
 }: TileProps) {
   const sizes = {
     sm: 'w-6 h-6',
@@ -52,8 +54,9 @@ export function Tile({
         ${colorClass}
         ${selected ? 'ring-2 ring-yellow-400 ring-offset-2 ring-offset-slate-800' : ''}
         ${onClick && !disabled ? 'cursor-pointer' : 'cursor-default'}
-        ${disabled ? 'opacity-50' : ''}
+        ${disabled && !wasCompleted ? 'tile-empty' : ''}
         ${showPattern ? 'opacity-30' : ''}
+        ${wasCompleted ? 'tile-completed' : ''}
         rounded-sm shadow-md transition-all duration-150
         flex items-center justify-center
       `}

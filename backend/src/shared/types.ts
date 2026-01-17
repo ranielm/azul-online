@@ -24,6 +24,7 @@ export interface PatternLine {
 export interface WallCell {
   color: TileColor;
   filled: boolean;
+  wasCompleted: boolean;
 }
 
 // Player board state

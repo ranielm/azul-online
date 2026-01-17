@@ -44,11 +44,11 @@ export function PatternLines({
             }}
             style={{ touchAction: 'manipulation' }}
             className={`
-              pattern-line min-h-[44px] h-auto py-2
+              pattern-line h-[28px] flex items-center justify-end gap-1 px-2
               ${canPlace && !disabled ? 'cursor-pointer hover:bg-slate-600 active:bg-slate-500' : ''}
               ${isSelected ? 'bg-slate-600 ring-2 ring-yellow-400' : ''}
               ${canPlace && !isSelected ? 'bg-slate-700/50' : ''}
-              rounded transition-all duration-150 p-1
+              rounded transition-all duration-150
             `}
           >
             {/* Empty slots */}

@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --tile-blue: #006DB2;
-  --tile-yellow: #E6A745;
-  --tile-red: #D93844;
-  --tile-black: #606C76;
-  --tile-white: #E8F1F2;
+  --tile-blue: #1e40af;
+  --tile-yellow: #d97706;
+  --tile-red: #dc2626;
+  --tile-black: #374151;
+  --tile-white: #ffffff;
 }
 
 body {
@@ -77,9 +77,9 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 4px;
-  box-shadow: 
-    inset 0 1px 0 rgba(255, 255, 255, 0.4), 
-    inset 0 -2px 0 rgba(0, 0, 0, 0.2), 
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.2),
     0 4px 6px rgba(0, 0, 0, 0.3);
   position: relative;
   overflow: hidden;
@@ -88,7 +88,10 @@ body {
 .tile-resin::after {
   content: '';
   position: absolute;
-  top: 0; left: 0; width: 100%; height: 50%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%);
   pointer-events: none;
 }
@@ -97,37 +100,82 @@ body {
 .tile-blue {
   @apply tile-resin;
   background-image: url('../assets/tile-blue.png');
-  background-color: #006DB2; /* Fallback */
+  background-color: #006DB2;
+  /* Fallback */
 }
 
 .tile-yellow {
   @apply tile-resin;
   background-image: url('../assets/tile-yellow.png');
-  background-color: #E6A745; /* Fallback */
+  background-color: #E6A745;
+  /* Fallback */
 }
 
 .tile-red {
   @apply tile-resin;
   background-image: url('../assets/tile-red.png');
-  background-color: #D93844; /* Fallback */
+  background-color: #D93844;
+  /* Fallback */
 }
 
 .tile-black {
   @apply tile-resin;
   background-image: url('../assets/tile-black.png');
-  background-color: #606C76; /* Fallback */
+  background-color: #606C76;
+  /* Fallback */
 }
 
 .tile-white {
   @apply tile-resin;
   background-image: url('../assets/tile-white.png');
-  background-color: #E8F1F2; /* Fallback */
+  background-color: #E8F1F2;
+  /* Fallback */
   @apply border border-slate-500/30;
+}
 }
 
 .tile-first-player {
-  @apply bg-gradient-to-br from-teal-500 to-teal-600 text-white flex items-center justify-center text-xs font-bold;
-  box-shadow: 0 2px 6px rgba(20, 184, 166, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  background: linear-gradient(145deg, #0891b2 0%, #0e7490 100%);
+  position: relative;
+  color: white;
+  box-shadow: 0 4px 12px rgba(8, 145, 178, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(14, 116, 144, 0.8);
+}
+
+.tile-first-player::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background-image:
+    /* Padrão radiante */
+    conic-gradient(from 0deg at 50% 50%,
+      rgba(255, 255, 255, 0.3) 0deg, transparent 45deg,
+      rgba(255, 255, 255, 0.3) 90deg, transparent 135deg,
+      rgba(255, 255, 255, 0.3) 180deg, transparent 225deg,
+      rgba(255, 255, 255, 0.3) 270deg, transparent 315deg),
+    /* Círculos concêntricos */
+    radial-gradient(circle at 50% 50%,
+      transparent 30%, rgba(255, 255, 255, 0.2) 35%,
+      transparent 40%, rgba(255, 255, 255, 0.1) 60%, transparent 65%);
+  background-size: 100% 100%;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Peças não completadas na parede - estilo diferente das linhas de padrão */
+.tile-empty {
+  border: 2px dashed rgba(100, 116, 139, 0.6) !important;
+  opacity: 0.4;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.4) !important;
+  filter: grayscale(0.3);
+}
+
+/* Peças completadas - destaque sutil mas visível */
+.tile-completed {
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.12), 0 2px 4px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  filter: brightness(1.05);
 }
 
 .factory {
@@ -136,6 +184,31 @@ body {
 
 .pattern-line {
   @apply flex justify-end gap-1;
+}
+
+/* Board alignment styles for perfect pattern line and wall alignment */
+.board-layout {
+  @apply flex flex-col;
+}
+
+.pattern-lines-container,
+.wall-container {
+  @apply flex flex-col gap-1;
+}
+
+/* Ensure pattern lines and wall rows have identical heights */
+.pattern-line,
+.wall-row {
+  height: 28px;
+  @apply flex items-center;
+}
+
+.pattern-line {
+  @apply justify-end gap-1 px-2;
+}
+
+.wall-row {
+  @apply justify-start gap-1;
 }
 
 .wall-cell {
@@ -187,6 +260,7 @@ body {
 
 /* Mobile: Stack everything vertically */
 @media (max-width: 767px) {
+
   /* Increase touch targets for tiles */
   .tile {
     @apply w-10 h-10;
@@ -238,7 +312,7 @@ body {
   }
 
   /* Hide decorative tiles on very small screens */
-  .landing-background > .absolute.pointer-events-none {
+  .landing-background>.absolute.pointer-events-none {
     display: none;
   }
 }

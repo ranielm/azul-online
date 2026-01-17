@@ -66,6 +66,7 @@ export function createPlayerBoard(): PlayerBoard {
       wall[row].push({
         color: WALL_PATTERN[row][col],
         filled: false,
+        wasCompleted: false,
       });
     }
   }
@@ -339,7 +340,11 @@ export function processWallTiling(player: Player): {
       const col = WALL_PATTERN[row].indexOf(patternLine.color);
 
       // Place tile on wall
-      newWall[row][col] = { ...newWall[row][col], filled: true };
+      newWall[row][col] = { 
+        ...newWall[row][col], 
+        filled: true,
+        wasCompleted: true
+      };
       tilesPlaced++;
 
       // Calculate score for this tile

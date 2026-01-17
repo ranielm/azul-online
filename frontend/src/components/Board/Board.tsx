@@ -109,28 +109,33 @@ export function Board({
 
       {/* Board content - Horizontal scroll on small screens to keep Pattern/Wall connected */}
       <div className="overflow-x-auto pb-4 -mx-4 px-4 sm:mx-0 sm:px-0">
-        <div className="flex gap-4 min-w-fit">
-          {/* Pattern lines */}
-          <div className="flex-shrink-0">
-            <h4 className="text-xs text-slate-500 mb-2 uppercase tracking-wide">
+        <div className="min-w-fit">
+          {/* Headers */}
+          <div className="grid grid-cols-[auto_auto] gap-4 mb-2">
+            <h4 className="text-xs text-slate-500 uppercase tracking-wide">
               {t.patternLines}
             </h4>
-            <PatternLines
-              patternLines={player.board.patternLines}
-              wall={player.board.wall}
-              selectedColor={canInteract ? selectedTiles?.color || null : null}
-              onSelectLine={handleSelectLine}
-              selectedLine={selectedLine}
-              disabled={!canInteract}
-            />
-          </div>
-
-          {/* Wall */}
-          <div className="flex-shrink-0">
-            <h4 className="text-xs text-slate-500 mb-2 uppercase tracking-wide">
+            <h4 className="text-xs text-slate-500 uppercase tracking-wide">
               {t.wall}
             </h4>
-            <Wall wall={player.board.wall} />
+          </div>
+
+          {/* Game board - Pattern lines and Wall aligned */}
+          <div className="grid grid-cols-[auto_auto] gap-4 items-start">
+            <div className="pattern-lines-container">
+              <PatternLines
+                patternLines={player.board.patternLines}
+                wall={player.board.wall}
+                selectedColor={canInteract ? selectedTiles?.color || null : null}
+                onSelectLine={handleSelectLine}
+                selectedLine={selectedLine}
+                disabled={!canInteract}
+              />
+            </div>
+
+            <div className="wall-container">
+              <Wall wall={player.board.wall} />
+            </div>
           </div>
         </div>
       </div>
