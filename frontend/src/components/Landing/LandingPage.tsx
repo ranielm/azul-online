@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from '../../i18n/useLanguage';
-import { LoginForm } from '../Auth/LoginForm';
-import { SignUpForm } from '../Auth/SignUpForm';
 import { useAuthStore } from '../../store/authStore';
 import { GameRules } from '../Game/GameRules';
 
