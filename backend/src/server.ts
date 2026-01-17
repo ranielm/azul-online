@@ -5,6 +5,8 @@ import cors from 'cors';
 import { setupSocketHandlers } from './socket/handlers';
 import { initDatabase } from './persistence/database';
 import { initializeFromDatabase } from './room/store';
+import { ExpressAuth, getSession } from '@auth/express';
+import { authConfig } from './auth.config';
 
 export async function createServer() {
   // Initialize database and load persisted rooms
@@ -45,6 +47,9 @@ export async function createServer() {
     credentials: true,
   };
 
+  // Auth.js Middleware
+  app.use("/api/auth/*", ExpressAuth(authConfig));
+
   app.use(cors(corsOptions));
   app.use(express.json());
 
@@ -55,6 +60,30 @@ export async function createServer() {
       timestamp: new Date().toISOString(),
       environment: process.env.NODE_ENV || 'development',
     });
+  });
+
+  // Active Game Endpoint
+  app.get('/api/game/active', async (req, res) => {
+    try {
+      // @ts-ignore - getSession signature might vary slightly based on version, assuming standard express usage
+      const session = await getSession(req, authConfig);
+
+      if (!session || !session.user || !session.user.id) {
+        res.status(401).json({ error: 'Unauthorized' });
+        return;
+      }
+
+      // We need to access findActiveGameForUser. 
+      // Use dynamic import or ensure it is exported from db module
+      // imported at top level: import { findActiveGameForUser } from './persistence/database';
+
+      const gameId = await import('./persistence/database').then(m => m.findActiveGameForUser(session.user!.id as string));
+
+      res.json({ gameId });
+    } catch (error) {
+      console.error('Error fetching active game:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
   });
 
   // Socket.io setup with same CORS config

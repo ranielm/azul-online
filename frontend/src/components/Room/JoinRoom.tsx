@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '../UI/Button';
 import { useTranslation } from '../../i18n/useLanguage';
+import { useAuthStore } from '../../store/authStore';
 
 interface JoinRoomProps {
   onJoinRoom: (roomId: string, playerName: string) => void;
@@ -10,15 +11,27 @@ interface JoinRoomProps {
 }
 
 export function JoinRoom({ onJoinRoom, onBack, initialRoomId = '' }: JoinRoomProps) {
+  const { user, guestName } = useAuthStore();
+  const { t } = useTranslation();
+
   const [roomId, setRoomId] = useState(initialRoomId);
   const [playerName, setPlayerName] = useState('');
-  const { t } = useTranslation();
 
   useEffect(() => {
     if (initialRoomId) {
       setRoomId(initialRoomId);
     }
   }, [initialRoomId]);
+
+  useEffect(() => {
+    if (user) {
+      setPlayerName(user.name || user.username || 'Player');
+    } else if (guestName) {
+      setPlayerName(guestName);
+    }
+  }, [user, guestName]);
+
+  const hasPredefinedName = !!(user || guestName);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,22 +66,31 @@ export function JoinRoom({ onJoinRoom, onBack, initialRoomId = '' }: JoinRoomPro
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
-            {t.yourName}
-          </label>
-          <input
-            type="text"
-            value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
-            placeholder={t.enterYourName}
-            maxLength={20}
-            className="w-full px-4 py-3 bg-slate-700 rounded-lg border border-slate-600
-                     focus:border-blue-500 focus:ring-1 focus:ring-blue-500
-                     outline-none transition-colors"
-            autoFocus={!!initialRoomId}
-          />
-        </div>
+        {!hasPredefinedName && (
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">
+              {t.yourName}
+            </label>
+            <input
+              type="text"
+              value={playerName}
+              onChange={(e) => setPlayerName(e.target.value)}
+              placeholder={t.enterYourName}
+              maxLength={20}
+              className="w-full px-4 py-3 bg-slate-700 rounded-lg border border-slate-600
+                         focus:border-blue-500 focus:ring-1 focus:ring-blue-500
+                         outline-none transition-colors"
+              autoFocus={!!initialRoomId}
+            />
+          </div>
+        )}
+
+        {hasPredefinedName && (
+          <div className="text-center mb-4">
+            <p className="text-slate-400 text-sm">{t.playingAs}</p>
+            <p className="text-white font-bold text-lg">{playerName}</p>
+          </div>
+        )}
 
         <div className="flex gap-3 pt-4">
           <Button type="button" variant="ghost" onClick={onBack} className="flex-1">

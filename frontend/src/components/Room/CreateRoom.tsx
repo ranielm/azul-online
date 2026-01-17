@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '../UI/Button';
 import { useTranslation } from '../../i18n/useLanguage';
+import { useAuthStore } from '../../store/authStore';
 
 interface CreateRoomProps {
   onCreateRoom: (playerName: string, maxPlayers: 2 | 3 | 4) => void;
@@ -9,9 +10,21 @@ interface CreateRoomProps {
 }
 
 export function CreateRoom({ onCreateRoom, onBack }: CreateRoomProps) {
+  const { user, guestName } = useAuthStore();
+  const { t } = useTranslation();
+
   const [playerName, setPlayerName] = useState('');
   const [maxPlayers, setMaxPlayers] = useState<2 | 3 | 4>(4);
-  const { t } = useTranslation();
+
+  useEffect(() => {
+    if (user) {
+      setPlayerName(user.name || user.username || 'Player');
+    } else if (guestName) {
+      setPlayerName(guestName);
+    }
+  }, [user, guestName]);
+
+  const hasPredefinedName = !!(user || guestName);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,22 +42,31 @@ export function CreateRoom({ onCreateRoom, onBack }: CreateRoomProps) {
       <h2 className="text-2xl font-bold mb-6 text-center">{t.createRoomTitle}</h2>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
-            {t.yourName}
-          </label>
-          <input
-            type="text"
-            value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
-            placeholder={t.enterYourName}
-            maxLength={20}
-            className="w-full px-4 py-3 bg-slate-700 rounded-lg border border-slate-600
-                     focus:border-blue-500 focus:ring-1 focus:ring-blue-500
-                     outline-none transition-colors"
-            autoFocus
-          />
-        </div>
+        {!hasPredefinedName && (
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">
+              {t.yourName}
+            </label>
+            <input
+              type="text"
+              value={playerName}
+              onChange={(e) => setPlayerName(e.target.value)}
+              placeholder={t.enterYourName}
+              maxLength={20}
+              className="w-full px-4 py-3 bg-slate-700 rounded-lg border border-slate-600
+                         focus:border-blue-500 focus:ring-1 focus:ring-blue-500
+                         outline-none transition-colors"
+              autoFocus
+            />
+          </div>
+        )}
+
+        {hasPredefinedName && (
+          <div className="text-center mb-4">
+            <p className="text-slate-400 text-sm">{t.playingAs}</p>
+            <p className="text-white font-bold text-lg">{playerName}</p>
+          </div>
+        )}
 
         <div>
           <label className="block text-sm font-medium text-slate-300 mb-2">
@@ -58,10 +80,9 @@ export function CreateRoom({ onCreateRoom, onBack }: CreateRoomProps) {
                 onClick={() => setMaxPlayers(num)}
                 className={`
                   flex-1 py-3 rounded-lg font-semibold transition-all
-                  ${
-                    maxPlayers === num
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                  ${maxPlayers === num
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
                   }
                 `}
               >

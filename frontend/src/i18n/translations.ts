@@ -17,6 +17,7 @@ export const translations = {
     maxPlayers: 'Máximo de Jogadores',
     playersCount: 'Jogadores',
     back: 'Voltar',
+    playingAs: 'Jogando como:',
 
     // Join Room
     joinRoomTitle: 'Entrar na Sala',
@@ -179,6 +180,7 @@ export const translations = {
     maxPlayers: 'Max Players',
     playersCount: 'Players',
     back: 'Back',
+    playingAs: 'Playing as:',
 
     // Join Room
     joinRoomTitle: 'Join Room',
