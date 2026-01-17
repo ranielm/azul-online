@@ -4,7 +4,7 @@ import {
     calculateFloorPenalty,
     calculateEndGameBonuses,
 } from './scoring';
-import { WallCell, TileColor } from '@shared/types';
+import { WallCell, TileColor } from '../../../packages/shared/src/types';
 
 // Helper to create a grid
 function createWall(): WallCell[][] {

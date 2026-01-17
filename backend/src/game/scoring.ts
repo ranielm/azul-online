@@ -1,4 +1,4 @@
-import { WallCell, TileColor, Tile } from '@shared/types';
+import { WallCell, TileColor, Tile } from '../../../packages/shared/src/types';
 
 // Points for completing a horizontal row
 export const POINTS_ROW_COMPLETE = 2;
