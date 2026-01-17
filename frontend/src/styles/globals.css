@@ -71,30 +71,57 @@ body {
   @apply transform scale-110;
 }
 
+/* Resin/Glossy Effect */
+.tile-resin {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 4px;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.4), 
+    inset 0 -2px 0 rgba(0, 0, 0, 0.2), 
+    0 4px 6px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.tile-resin::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 50%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+}
+
 /* Portuguese Tile Palette - Ceramic/Resin look */
 .tile-blue {
-  background: linear-gradient(145deg, #0080CC 0%, #005A99 100%);
-  box-shadow: 0 2px 6px rgba(0, 109, 178, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  @apply tile-resin;
+  background-image: url('../assets/tile-blue.png');
+  background-color: #006DB2; /* Fallback */
 }
 
 .tile-yellow {
-  background: linear-gradient(145deg, #F0B652 0%, #CC8F38 100%);
-  box-shadow: 0 2px 6px rgba(230, 167, 69, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  @apply tile-resin;
+  background-image: url('../assets/tile-yellow.png');
+  background-color: #E6A745; /* Fallback */
 }
 
 .tile-red {
-  background: linear-gradient(145deg, #E84550 0%, #BF2D38 100%);
-  box-shadow: 0 2px 6px rgba(217, 56, 68, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  @apply tile-resin;
+  background-image: url('../assets/tile-red.png');
+  background-color: #D93844; /* Fallback */
 }
 
 .tile-black {
-  background: linear-gradient(145deg, #3D444D 0%, #1F252B 100%);
-  box-shadow: 0 2px 6px rgba(31, 37, 43, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  @apply tile-resin;
+  background-image: url('../assets/tile-black.png');
+  background-color: #606C76; /* Fallback */
 }
 
 .tile-white {
-  background: linear-gradient(145deg, #F2F8F9 0%, #D8E4E6 100%);
-  box-shadow: 0 2px 6px rgba(232, 241, 242, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  @apply tile-resin;
+  background-image: url('../assets/tile-white.png');
+  background-color: #E8F1F2; /* Fallback */
   @apply border border-slate-500/30;
 }
 

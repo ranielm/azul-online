@@ -4,6 +4,7 @@ import { Player, TileSelection, TilePlacement, PlayerMove } from '@shared/types'
 import { PatternLines } from './PatternLines';
 import { Wall } from './Wall';
 import { FloorLine } from './FloorLine';
+import { ScoreTrack } from './ScoreTrack';
 import { getValidPatternLines } from '../../utils/gameHelpers';
 import { useTranslation } from '../../i18n/useLanguage';
 
@@ -32,10 +33,10 @@ export function Board({
   const canInteract = isCurrentPlayer && isMyBoard && selectedTiles !== null;
   const validLines = selectedTiles
     ? getValidPatternLines(
-        player.board.patternLines,
-        player.board.wall,
-        selectedTiles.color
-      )
+      player.board.patternLines,
+      player.board.wall,
+      selectedTiles.color
+    )
     : [];
 
   const handleSelectLine = (lineIndex: number) => {
@@ -97,39 +98,40 @@ export function Board({
             {player.isHost && ` (${t.host})`}
           </span>
         </div>
-        <motion.div
-          key={player.board.score}
-          initial={{ scale: 1 }}
-          animate={{ scale: [1, 1.2, 1] }}
-          className="text-2xl font-bold text-yellow-400"
-        >
-          {player.board.score} {t.pts}
-        </motion.div>
+      </div>
+      <div className="mb-4 overflow-x-auto pb-2">
+        {/* Score Track */}
+        <div className="min-w-[600px] lg:min-w-0">
+          {/* We might need a wrapper to ensure it fits or scrolls on very small screens if it's too wide */}
+          <ScoreTrack score={player.board.score} color={isMyBoard ? 'bg-blue-600' : 'bg-slate-600'} />
+        </div>
       </div>
 
-      {/* Board content */}
-      <div className="flex gap-4">
-        {/* Pattern lines */}
-        <div className="flex-shrink-0">
-          <h4 className="text-xs text-slate-500 mb-2 uppercase tracking-wide">
-            {t.patternLines}
-          </h4>
-          <PatternLines
-            patternLines={player.board.patternLines}
-            wall={player.board.wall}
-            selectedColor={canInteract ? selectedTiles?.color || null : null}
-            onSelectLine={handleSelectLine}
-            selectedLine={selectedLine}
-            disabled={!canInteract}
-          />
-        </div>
+      {/* Board content - Horizontal scroll on small screens to keep Pattern/Wall connected */}
+      <div className="overflow-x-auto pb-4 -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div className="flex gap-4 min-w-fit">
+          {/* Pattern lines */}
+          <div className="flex-shrink-0">
+            <h4 className="text-xs text-slate-500 mb-2 uppercase tracking-wide">
+              {t.patternLines}
+            </h4>
+            <PatternLines
+              patternLines={player.board.patternLines}
+              wall={player.board.wall}
+              selectedColor={canInteract ? selectedTiles?.color || null : null}
+              onSelectLine={handleSelectLine}
+              selectedLine={selectedLine}
+              disabled={!canInteract}
+            />
+          </div>
 
-        {/* Wall */}
-        <div className="flex-shrink-0">
-          <h4 className="text-xs text-slate-500 mb-2 uppercase tracking-wide">
-            {t.wall}
-          </h4>
-          <Wall wall={player.board.wall} />
+          {/* Wall */}
+          <div className="flex-shrink-0">
+            <h4 className="text-xs text-slate-500 mb-2 uppercase tracking-wide">
+              {t.wall}
+            </h4>
+            <Wall wall={player.board.wall} />
+          </div>
         </div>
       </div>
 
