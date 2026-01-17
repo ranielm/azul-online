@@ -9,8 +9,7 @@
     "start": "node dist/backend/src/index.js",
     "render-build": "npm install && npm run build",
     "test": "vitest",
-    "lint": "eslint src --ext .ts",
-    "prestart": "node -e \"const fs=require('fs'); console.log('DEBUG: Root files:', fs.readdirSync('.')); try { console.log('DEBUG: Dist files:', fs.readdirSync('dist')); } catch(e) { console.log('DEBUG: Dist folder not found'); }\""
+    "lint": "eslint src --ext .ts"
   },
   "dependencies": {
     "@auth/core": "^0.41.1",
