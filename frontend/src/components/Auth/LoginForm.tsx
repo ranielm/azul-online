@@ -23,18 +23,8 @@ export function LoginForm({ onSwitchToSignUp, onSuccess }: LoginFormProps) {
     setError('');
     setIsLoading(true);
 
-    // Simulate API call - replace with actual auth
-    setTimeout(() => {
-      // Mock successful login
-      login({
-        id: 'user-' + Date.now(),
-        username: email.split('@')[0],
-        email,
-        avatar: null,
-      });
-      setIsLoading(false);
-      onSuccess();
-    }, 1000);
+    // Redirect to Auth.js signin page
+    login();
   };
 
   return (

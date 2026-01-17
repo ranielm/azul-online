@@ -45,17 +45,8 @@ export function SignUpForm({ onSwitchToLogin, onSuccess }: SignUpFormProps) {
   const handleAvatarSubmit = async () => {
     setIsLoading(true);
 
-    // Simulate API call - replace with actual auth
-    setTimeout(() => {
-      login({
-        id: 'user-' + Date.now(),
-        username,
-        email,
-        avatar,
-      });
-      setIsLoading(false);
-      onSuccess();
-    }, 1000);
+    // Redirect to Auth.js signin page
+    login();
   };
 
   const handleBack = () => {
