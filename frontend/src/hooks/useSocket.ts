@@ -18,7 +18,7 @@ export function useSocket() {
   useEffect(() => {
     const socket = socketService.connect();
 
-    // Define callbacks
+    // Define callbacks with 'any' to satisfy socketService.off logic
     const onConnect = () => {
       setConnected(true);
       setPlayerId(socket.id || null);
@@ -28,89 +28,91 @@ export function useSocket() {
       setConnected(false);
     };
 
-    const onRoomCreated = ({ room, playerId }: { room: any, playerId: string }) => {
+    const onRoomCreated = (data: any) => {
+      const { room, playerId } = data;
       setRoom(room);
       setPlayerId(playerId);
       localStorage.setItem('azul-room-id', room.id);
       localStorage.setItem('azul-player-id', playerId);
     };
 
-    const onRoomJoined = ({ room, playerId }: { room: any, playerId: string }) => {
+    const onRoomJoined = (data: any) => {
+      const { room, playerId } = data;
       setRoom(room);
       setPlayerId(playerId);
       localStorage.setItem('azul-room-id', room.id);
       localStorage.setItem('azul-player-id', playerId);
     };
 
-    const onRoomUpdated = ({ room }: { room: any }) => {
-      setRoom(room);
+    const onRoomUpdated = (data: any) => {
+      setRoom(data.room);
     };
 
-    const onPlayerJoined = ({ player }: { player: any }) => {
+    const onPlayerJoined = (data: any) => {
       setRoom((prev) => {
         if (!prev) return null;
         return {
           ...prev,
           gameState: {
             ...prev.gameState,
-            players: [...prev.gameState.players, player],
+            players: [...prev.gameState.players, data.player],
           },
         };
       });
     };
 
-    const onPlayerLeft = ({ playerId }: { playerId: string }) => {
+    const onPlayerLeft = (data: any) => {
       setRoom((prev) => {
         if (!prev) return null;
         return {
           ...prev,
           gameState: {
             ...prev.gameState,
-            players: prev.gameState.players.filter((p) => p.id !== playerId),
+            players: prev.gameState.players.filter((p) => p.id !== data.playerId),
           },
         };
       });
     };
 
-    const onRoomError = ({ message }: { message: string }) => {
-      setError(message);
+    const onRoomError = (data: any) => {
+      setError(data.message);
     };
 
-    const onGameStarted = ({ gameState }: { gameState: any }) => {
-      setGameState(gameState);
+    const onGameStarted = (data: any) => {
+      setGameState(data.gameState);
     };
 
-    const onGameStateUpdated = ({ gameState }: { gameState: any }) => {
-      setGameState(gameState);
+    const onGameStateUpdated = (data: any) => {
+      setGameState(data.gameState);
     };
 
-    const onGameFinished = ({ gameState }: { gameState: any }) => {
-      setGameState(gameState);
+    const onGameFinished = (data: any) => {
+      setGameState(data.gameState);
     };
 
-    const onGameError = ({ message }: { message: string }) => {
-      setError(message);
+    const onGameError = (data: any) => {
+      setError(data.message);
     };
 
-    const onPlayerReconnected = ({ gameState }: { gameState: any }) => {
-      setGameState(gameState);
+    const onPlayerReconnected = (data: any) => {
+      setGameState(data.gameState);
     };
 
-    const onPlayerDisconnected = ({ playerId: disconnectedId }: { playerId: string }) => {
+    const onPlayerDisconnected = (data: any) => {
       setGameState((prev) => {
         if (!prev) return null;
         return {
           ...prev,
           players: prev.players.map((p) =>
-            p.id === disconnectedId ? { ...p, isConnected: false } : p
+            p.id === data.playerId ? { ...p, isConnected: false } : p
           ),
         };
       });
     };
 
-    const onRoomCodeChanged = ({ room }: { room: any }) => {
-      setRoom(room);
-      localStorage.setItem('azul-room-id', room.id);
+    const onRoomCodeChanged = (data: any) => {
+      setRoom(data.room);
+      localStorage.setItem('azul-room-id', data.room.id);
     };
 
     // Register listeners
