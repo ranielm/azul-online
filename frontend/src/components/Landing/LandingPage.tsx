@@ -31,7 +31,8 @@ export function LandingPage({ onCreateRoom, onJoinRoom }: LandingPageProps) {
   };
 
   const handleLogin = (provider: 'google' | 'github') => {
-    window.location.href = `/api/auth/signin/${provider}`;
+    const apiUrl = import.meta.env.VITE_API_URL || '';
+    window.location.href = `${apiUrl}/api/auth/signin/${provider}`;
   };
 
   return (

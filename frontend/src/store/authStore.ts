@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 export interface User {
   id?: string;
   name?: string;
@@ -34,7 +36,7 @@ export const useAuthStore = create<AuthStore>()(
       checkSession: async () => {
         set({ isLoading: true });
         try {
-          const res = await fetch('/api/auth/session');
+          const res = await fetch(`${API_URL}/api/auth/session`, { credentials: 'include' });
           const session = await res.json();
           if (session && session.user) {
             // Map Auth.js user to our internal User format
@@ -47,7 +49,7 @@ export const useAuthStore = create<AuthStore>()(
             // Check for active game
             let activeGameId = null;
             try {
-              const gameRes = await fetch('/api/game/active');
+              const gameRes = await fetch(`${API_URL}/api/game/active`, { credentials: 'include' });
               if (gameRes.ok) {
                 const data = await gameRes.json();
                 activeGameId = data.gameId;
@@ -69,13 +71,13 @@ export const useAuthStore = create<AuthStore>()(
       setGuestName: (guestName) => set({ guestName }),
 
       login: () => {
-        window.location.href = '/api/auth/signin';
+        window.location.href = `${API_URL}/api/auth/signin`;
       },
 
       logout: async () => {
         // Optional: Call signout endpoint if needed, or just clear local state 
         // usually /api/auth/signout
-        await fetch('/api/auth/signout', { method: 'POST' });
+        await fetch(`${API_URL}/api/auth/signout`, { method: 'POST', credentials: 'include' });
         set({ user: null, isAuthenticated: false });
         window.location.reload();
       },
