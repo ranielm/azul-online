@@ -14,7 +14,7 @@ export function CreateRoom({ onCreateRoom, onBack }: CreateRoomProps) {
   const { t } = useTranslation();
 
   const [playerName, setPlayerName] = useState('');
-  const [maxPlayers, setMaxPlayers] = useState<2 | 3 | 4>(4);
+  const [maxPlayers, setMaxPlayers] = useState<2 | 3 | 4>(2);
 
   useEffect(() => {
     if (user) {

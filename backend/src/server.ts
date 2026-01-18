@@ -88,6 +88,20 @@ export async function createServer() {
   // Auth.js Middleware
   app.use("/api/auth", ExpressAuth(authConfig));
 
+  // Global Error Handler for Auth - MUST be after ExpressAuth
+  app.use("/api/auth", (err: any, req: any, res: any, next: any) => {
+    console.error("========================================");
+    console.error("AUTH ERROR HANDLER CAUGHT:");
+    console.error("Error Name:", err?.name);
+    console.error("Error Message:", err?.message);
+    console.error("Error Stack:", err?.stack);
+    console.error("Request URL:", req?.originalUrl);
+    console.error("========================================");
+
+    // Let the default error page render
+    next(err);
+  });
+
   // Health check endpoint
   app.get('/api/health', (req, res) => {
     res.json({

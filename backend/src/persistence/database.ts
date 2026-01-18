@@ -74,6 +74,14 @@ export async function initDatabase(): Promise<void> {
       FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
     )`);
 
+    // Required by Auth.js for PKCE verification
+    await db.execute(`CREATE TABLE IF NOT EXISTS verification_tokens (
+      identifier TEXT NOT NULL,
+      token TEXT NOT NULL UNIQUE,
+      expires DATETIME NOT NULL,
+      PRIMARY KEY (identifier, token)
+    )`);
+
     // Create Game Persistence Tables
     await db.execute(`CREATE TABLE IF NOT EXISTS game_sessions (
       id TEXT PRIMARY KEY,
