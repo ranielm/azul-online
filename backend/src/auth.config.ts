@@ -201,19 +201,11 @@ export const authConfig = {
     debug: true,
     callbacks: {
         async redirect({ url, baseUrl }: any) {
-            // After login, redirect to the frontend
+            // ALWAYS redirect to the frontend after any auth action (signin/signout)
             const frontendUrl = process.env.CORS_ORIGIN?.split(',')[0] || 'http://localhost:5174';
             console.log("AUTH CALLBACK: REDIRECT", { url, baseUrl, redirectTo: frontendUrl });
 
-            // If url is relative, make it absolute with frontend
-            if (url.startsWith('/')) {
-                return `${frontendUrl}${url}`;
-            }
-            // If url is already pointing to frontend, allow it
-            if (url.startsWith(frontendUrl)) {
-                return url;
-            }
-            // Default: redirect to frontend home
+            // Always return the frontend URL
             return frontendUrl;
         },
         async signIn({ user, account, profile }: any) {
