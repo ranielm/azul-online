@@ -12,6 +12,7 @@ interface TileProps {
   size?: 'sm' | 'md' | 'lg';
   showPattern?: boolean;
   wasCompleted?: boolean;
+  variant?: 'default' | 'slot'; // 'slot' = wall watermark style
   sourceInfo?: TileSelection; // Information about where this tile is from
   onDrop?: (source: TileSelection, targetRow: number) => void;
 }
@@ -24,6 +25,7 @@ export function Tile({
   size = 'md',
   showPattern = false,
   wasCompleted = false,
+  variant = 'default',
   sourceInfo,
   onDrop,
 }: TileProps) {
@@ -108,8 +110,9 @@ export function Tile({
         ${colorClass}
         ${selected ? 'ring-2 ring-yellow-400 ring-offset-2 ring-offset-slate-800' : ''}
         ${onClick && !disabled ? 'cursor-pointer' : 'cursor-default'}
-        ${disabled && !wasCompleted ? 'tile-empty' : ''}
-        ${showPattern ? 'opacity-30' : ''}
+        ${variant === 'slot' ? 'tile-slot' : ''}
+        ${disabled && !wasCompleted && variant !== 'slot' ? 'tile-empty' : ''}
+        ${showPattern ? 'opacity-25' : ''}
         ${wasCompleted ? 'tile-completed' : ''}
         rounded-sm shadow-md transition-all duration-150
         flex items-center justify-center

@@ -60,7 +60,7 @@ export function Wall({ wall, isMyBoard = false }: WallProps) {
                     wasCompleted={wasCompleted}
                   />
                 ) : (
-                  <Tile color={cell.color} size="sm" disabled showPattern />
+                  <Tile color={cell.color} size="sm" disabled variant="slot" />
                 )}
               </motion.div>
             );
