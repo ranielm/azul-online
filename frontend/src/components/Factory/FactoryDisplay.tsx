@@ -68,20 +68,10 @@ export function FactoryDisplay({
       {/* Bag Remaining */}
       {bag.length > 0 && (
         <div className="mt-4 p-4 bg-slate-800/50 rounded-xl border border-slate-700">
-          <h3 className="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wide flex justify-between">
+          <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wide flex justify-between items-center m-0">
             <span>{t.bag}</span>
-            <span>{bag.length}</span>
+            <span className="text-white font-bold">{bag.length}</span>
           </h3>
-          <div className="flex justify-between gap-2">
-            {colors.map(color => (
-              <div key={color} className="flex flex-col items-center gap-1">
-                <div className="scale-75 origin-center">
-                  <Tile color={color} size="sm" disabled />
-                </div>
-                <span className="text-xs font-medium text-slate-300">{bagCounts[color] || 0}</span>
-              </div>
-            ))}
-          </div>
         </div>
       )}
     </div>
