@@ -14,6 +14,7 @@ import { LanguageSelector } from './components/UI/LanguageSelector';
 import { useTranslation } from './i18n/useLanguage';
 import { TileSelection } from '@shared/types';
 import { TutorialOverlay } from './components/Tutorial/TutorialOverlay';
+import { VersionFooter } from './components/VersionFooter';
 
 type Screen = 'home' | 'create' | 'join' | 'lobby' | 'game';
 
@@ -273,6 +274,8 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <VersionFooter />
     </div>
   );
 }
