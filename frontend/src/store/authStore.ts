@@ -119,7 +119,7 @@ export const useAuthStore = create<AuthStore>()(
       },
     }),
     {
-      name: 'azul-auth',
+      name: 'ladrilho-auth',
     }
   )
 );

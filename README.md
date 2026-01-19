@@ -1,12 +1,12 @@
-# Azul Online
+# Ladrilho
 
-A free, open-source online multiplayer implementation of the classic Azul board game.
+A free, open-source online multiplayer implementation of the classic Ladrilho board game.
 
 ## Features
 
 - Real-time multiplayer (2-4 players)
 - No account required - just nicknames and shareable room links
-- Full implementation of classic Azul rules
+- Full implementation of classic Ladrilho rules
 - Responsive design for desktop and mobile
 - Docker support for easy deployment
 
@@ -61,7 +61,7 @@ npm run dev
 ## Project Structure
 
 ```
-azul-online/
+ladrilho/
 ├── packages/shared/     # Shared TypeScript types and constants
 ├── backend/             # Node.js + Socket.io server
 ├── frontend/            # React + TypeScript client
@@ -77,7 +77,7 @@ azul-online/
 
 ## Game Rules
 
-See [AZUL_ONLINE.md](./AZUL_ONLINE.md) for complete game rules and implementation details.
+See [LADRILHO.md](./LADRILHO.md) for complete game rules and implementation details.
 
 ## Deployment
 

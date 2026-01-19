@@ -3,7 +3,7 @@ export type Language = 'pt-BR' | 'en-US';
 export const translations = {
   'pt-BR': {
     // Home
-    title: 'Azul Online',
+    title: 'Ladrilho',
     subtitle: 'Jogue o clássico jogo de tabuleiro com amigos',
     createRoom: 'Criar Sala',
     joinRoom: 'Entrar na Sala',
@@ -147,7 +147,7 @@ export const translations = {
 
     // Game Rules
     rules: 'Regras',
-    rulesTitle: 'Como Jogar Azul',
+    rulesTitle: 'Como Jogar Ladrilho',
     rulesClose: 'Fechar',
     rulesObjective: 'Objetivo',
     rulesObjectiveText: 'Decore as paredes do Palácio Real de Évora com azulejos portugueses. Ganhe pontos colocando peças na parede e complete linhas, colunas e conjuntos de cores para bônus.',
@@ -172,7 +172,7 @@ export const translations = {
   },
   'en-US': {
     // Home
-    title: 'Azul Online',
+    title: 'Ladrilho',
     subtitle: 'Play the classic board game with friends',
     createRoom: 'Create Room',
     joinRoom: 'Join Room',
@@ -316,7 +316,7 @@ export const translations = {
 
     // Game Rules
     rules: 'Rules',
-    rulesTitle: 'How to Play Azul',
+    rulesTitle: 'How to Play Ladrilho',
     rulesClose: 'Close',
     rulesObjective: 'Objective',
     rulesObjectiveText: 'Decorate the walls of the Royal Palace of Évora with Portuguese tiles. Score points by placing tiles on the wall and complete rows, columns, and color sets for bonuses.',

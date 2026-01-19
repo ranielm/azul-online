@@ -7,7 +7,7 @@ async function main() {
   const server = await createServer();
 
   server.listen(PORT, () => {
-    console.log(`Azul Online server running on port ${PORT}`);
+    console.log(`Ladrilho server running on port ${PORT}`);
   });
 }
 

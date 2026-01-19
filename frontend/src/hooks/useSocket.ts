@@ -35,16 +35,16 @@ export function useSocket() {
       const { room, playerId } = data;
       setRoom(room);
       setPlayerId(playerId);
-      localStorage.setItem('azul-room-id', room.id);
-      localStorage.setItem('azul-player-id', playerId);
+      localStorage.setItem('ladrilho-room-id', room.id);
+      localStorage.setItem('ladrilho-player-id', playerId);
     };
 
     const onRoomJoined = (data: any) => {
       const { room, playerId } = data;
       setRoom(room);
       setPlayerId(playerId);
-      localStorage.setItem('azul-room-id', room.id);
-      localStorage.setItem('azul-player-id', playerId);
+      localStorage.setItem('ladrilho-room-id', room.id);
+      localStorage.setItem('ladrilho-player-id', playerId);
     };
 
     const onRoomUpdated = (data: any) => {
@@ -84,8 +84,8 @@ export function useSocket() {
       // If room doesn't exist anymore, clear local state
       if (data.message?.includes('not found') || data.message?.includes('Player not found')) {
         console.log('Clearing stale room/player data');
-        localStorage.removeItem('azul-room-id');
-        localStorage.removeItem('azul-player-id');
+        localStorage.removeItem('ladrilho-room-id');
+        localStorage.removeItem('ladrilho-player-id');
         setRoom(null);
         setGameState(null);
       }
@@ -110,8 +110,8 @@ export function useSocket() {
       // If player/room doesn't exist anymore, clear local state  
       if (data.message?.includes('not found') || data.message?.includes('Player not found')) {
         console.log('Clearing stale room/player data from game error');
-        localStorage.removeItem('azul-room-id');
-        localStorage.removeItem('azul-player-id');
+        localStorage.removeItem('ladrilho-room-id');
+        localStorage.removeItem('ladrilho-player-id');
         setRoom(null);
         setGameState(null);
       }
@@ -135,7 +135,7 @@ export function useSocket() {
 
     const onRoomCodeChanged = (data: any) => {
       setRoom(data.room);
-      localStorage.setItem('azul-room-id', data.room.id);
+      localStorage.setItem('ladrilho-room-id', data.room.id);
     };
 
     // Register listeners
@@ -191,8 +191,8 @@ export function useSocket() {
       socketService.leaveRoom(room.id);
       setRoom(null);
       setGameState(null);
-      localStorage.removeItem('azul-room-id');
-      localStorage.removeItem('azul-player-id');
+      localStorage.removeItem('ladrilho-room-id');
+      localStorage.removeItem('ladrilho-player-id');
     }
   }, [room, setRoom, setGameState]);
 

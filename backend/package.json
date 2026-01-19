@@ -1,7 +1,7 @@
 {
-  "name": "@azul-online/backend",
+  "name": "@ladrilho/backend",
   "version": "1.0.0",
-  "description": "Azul Online Game Server",
+  "description": "Ladrilho Game Server",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",

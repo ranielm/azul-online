@@ -1,6 +1,6 @@
-# Azul Online - Multiplayer Board Game
+# Ladrilho - Multiplayer Board Game
 
-A free, open-source online implementation of the classic Azul board game with real-time multiplayer support.
+A free, open-source online implementation of the classic Ladrilho board game with real-time multiplayer support.
 
 ## Table of Contents
 
@@ -21,7 +21,7 @@ A free, open-source online implementation of the classic Azul board game with re
 ## Project Overview
 
 ### Goals
-- Create a fully functional online multiplayer Azul board game
+- Create a fully functional online multiplayer Ladrilho board game
 - Support 2-4 players in real-time
 - No user accounts required - just nicknames and shareable room links
 - Responsive design for desktop and mobile
@@ -30,7 +30,7 @@ A free, open-source online implementation of the classic Azul board game with re
 ### Key Features
 - **Room System**: Create/join rooms via shareable links
 - **Real-time Gameplay**: Instant synchronization across all players
-- **Classic Azul Rules**: Full implementation of the base game
+- **Classic Ladrilho Rules**: Full implementation of the base game
 - **Visual Feedback**: Clear UI showing turn status, valid moves, and scores
 - **Restart Capability**: Play again with the same group
 
@@ -128,7 +128,7 @@ Player Action → Client Validation → Socket Event → Server Validation
 ## Project Structure
 
 ```
-azul-online/
+Ladrilho-online/
 ├── docker-compose.yml          # Multi-container orchestration
 ├── docker-compose.prod.yml     # Production configuration
 ├── .github/
@@ -224,7 +224,7 @@ azul-online/
 
 ## Game Rules Implementation
 
-### Azul Classic Rules
+### Ladrilho Classic Rules
 
 #### Components
 - **100 tiles**: 20 of each color (blue, yellow, red, black, white)
@@ -664,8 +664,8 @@ docker-compose exec frontend npm test
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/azul-online.git
-cd azul-online
+git clone https://github.com/yourusername/Ladrilho-online.git
+cd Ladrilho-online
 
 # Install dependencies
 npm install
@@ -684,8 +684,8 @@ cd frontend && npm run dev
 
 ```bash
 # Clone and start
-git clone https://github.com/yourusername/azul-online.git
-cd azul-online
+git clone https://github.com/yourusername/Ladrilho-online.git
+cd Ladrilho-online
 docker-compose up
 
 # Access
@@ -837,7 +837,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## Acknowledgments
 
-- Original Azul game by Michael Kiesling
+- Original Ladrilho game by Michael Kiesling
 - Published by Plan B Games / Next Move Games
 - This is a fan-made project for educational purposes
 
@@ -860,7 +860,7 @@ Players must be able to:
 
 There is **no local-only mode** in the MVP. All gameplay is synchronized through an online server.
 
-> *Azul Online is a fully online multiplayer game, designed for players connecting remotely over the internet, with a server-authoritative architecture ensuring fair play, synchronization, and scalability.*
+> *Ladrilho is a fully online multiplayer game, designed for players connecting remotely over the internet, with a server-authoritative architecture ensuring fair play, synchronization, and scalability.*
 
 ### Client-Server Architecture
 

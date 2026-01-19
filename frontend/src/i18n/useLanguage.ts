@@ -14,7 +14,7 @@ export const useLanguageStore = create<LanguageStore>()(
       setLanguage: (language) => set({ language }),
     }),
     {
-      name: 'azul-language',
+      name: 'ladrilho-language',
     }
   )
 );
