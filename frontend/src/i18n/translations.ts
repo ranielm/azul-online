@@ -57,6 +57,8 @@ export const translations = {
     playing: 'Jogando...',
     factories: 'FÁBRICAS',
     bag: 'RESTANTE NA SACOLA',
+    centerTilesBadge: 'Peças no centro',
+    centerEmpty: 'Centro vazio',
 
     // Game Over
     youWon: 'Você Venceu!',
@@ -253,6 +255,8 @@ export const translations = {
     playing: 'Playing...',
     factories: 'FACTORIES',
     bag: 'REMAINING IN BAG',
+    centerTilesBadge: 'Tiles in center',
+    centerEmpty: 'Center is empty',
 
     // Game Over
     youWon: 'You Won!',

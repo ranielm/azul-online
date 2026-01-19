@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CenterPool as CenterPoolType, TileColor, TileSelection } from '@shared/types';
 import { Tile } from '../Tile/Tile';
 import { groupTilesByColor } from '../../utils/gameHelpers';
+import { useTranslation } from '../../i18n/useLanguage';
 
 interface CenterPoolProps {
   centerPool: CenterPoolType;
@@ -19,6 +20,7 @@ export function CenterPool({
   disabled = false,
   onTileDrop,
 }: CenterPoolProps) {
+  const { t } = useTranslation();
   const [hoveredColor, setHoveredColor] = useState<TileColor | null>(null);
   const isSelected = selectedTiles?.source === 'center';
 
@@ -65,9 +67,12 @@ export function CenterPool({
             </motion.div>
           )}
 
-          {/* Tile Count Badge */}
+          {/* Tile Count Badge with Tooltip */}
           {!isEmpty && (
-            <div className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center border-2 border-slate-800 z-10 shadow-lg">
+            <div
+              className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center border-2 border-slate-800 z-10 shadow-lg cursor-help"
+              title={t.centerTilesBadge}
+            >
               {centerPool.tiles.length}
             </div>
           )}
@@ -100,7 +105,7 @@ export function CenterPool({
         </AnimatePresence>
 
         {isEmpty && (
-          <span className="text-slate-500 text-sm">Center is empty</span>
+          <span className="text-slate-500 text-sm">{t.centerEmpty}</span>
         )}
       </div>
 
