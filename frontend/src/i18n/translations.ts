@@ -151,6 +151,11 @@ export const translations = {
     continueGame: 'Continuar',
     nextRound: (n: number) => `Próxima: Rodada ${n}`,
 
+    // Copy Link
+    copyRoomLink: 'Copiar Link da Sala',
+    linkCopied: 'Link da sala copiado!',
+
+
     // Game Rules
     rules: 'Regras',
     rulesTitle: 'Como Jogar Ladrilho',
@@ -325,6 +330,11 @@ export const translations = {
     totalScore: 'Total Score',
     continueGame: 'Continue',
     nextRound: (n: number) => `Next: Round ${n}`,
+
+    // Copy Link
+    copyRoomLink: 'Copy Room Link',
+    linkCopied: 'Room link copied!',
+
 
     // Game Rules
     rules: 'Rules',

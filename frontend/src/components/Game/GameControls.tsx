@@ -121,6 +121,27 @@ export function GameControls({ onLeaveGame, onShowTutorial }: GameControlsProps)
           }
         />
 
+        {/* Copy Link Button */}
+        <IconButton
+          onClick={() => {
+            navigator.clipboard.writeText(window.location.href);
+            // We can't easily show a toast from here without props, 
+            // but we can change the icon temporarily or rely on user knowing it works.
+            // For better UX, let's toggle a local state to show a checkmark.
+            const btn = document.getElementById('copy-link-btn');
+            if (btn) {
+              btn.classList.add('text-green-400');
+              setTimeout(() => btn.classList.remove('text-green-400'), 2000);
+            }
+          }}
+          title={t.copyRoomLink}
+          icon={
+            <svg id="copy-link-btn" className="w-5 h-5 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+          }
+        />
+
         {/* Fullscreen Toggle */}
         <IconButton
           onClick={toggleFullscreen}
