@@ -16,7 +16,7 @@ A free, open-source online multiplayer implementation of the classic Ladrilho bo
 
 ```bash
 # Clone the repository
-git clone https://github.com/ranielm/azul-online.git
+git clone https://github.com/ranielm/ladrilho.git
 cd azul-online
 
 # Start with Docker Compose
