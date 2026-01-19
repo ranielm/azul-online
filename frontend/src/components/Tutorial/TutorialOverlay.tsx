@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronRight, ChevronLeft, Info, MousePointer2 } from 'lucide-react';
+import { X, ChevronRight, ChevronLeft, MousePointer2 } from 'lucide-react';
 import { Tile } from '../Tile/Tile';
 import { useTranslation } from '../../i18n/useLanguage';
 
@@ -9,69 +9,34 @@ interface TutorialOverlayProps {
     onComplete: () => void;
 }
 
-const STEPS = [
-    {
-        id: 'intro',
-        title: 'tutorial.intro.title',
-        content: 'tutorial.intro.content',
-        highlight: null,
-    },
-    {
-        id: 'drafting',
-        title: 'tutorial.draft.title',
-        content: 'tutorial.draft.content',
-        highlight: 'factory',
-    },
-    {
-        id: 'pattern',
-        title: 'tutorial.pattern.title',
-        content: 'tutorial.pattern.content',
-        highlight: 'pattern-lines',
-    },
-    {
-        id: 'wall',
-        title: 'tutorial.wall.title',
-        content: 'tutorial.wall.content',
-        highlight: 'wall',
-    },
-    {
-        id: 'penalty',
-        title: 'tutorial.penalty.title',
-        content: 'tutorial.penalty.content',
-        highlight: 'floor-line',
-    },
-];
+const STEP_IDS = ['intro', 'drafting', 'pattern', 'wall', 'penalty'] as const;
+type StepId = typeof STEP_IDS[number];
 
 export function TutorialOverlay({ onClose, onComplete }: TutorialOverlayProps) {
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
-    const { t } = useTranslation(); // Assuming translation hook exists, otherwise fallback to strings
+    const [doNotShowAgain, setDoNotShowAgain] = useState(false);
+    const { t } = useTranslation();
 
-    // Safe fallback for t function if it doesn't return strings for these keys yet
-    const getText = (key: string, defaultText: string) => {
-        // This is a placeholder; in real app we'd use robust i18n
-        // specific logic for tutorial text would go here or in translations file
-        const texts: Record<string, string> = {
-            'tutorial.intro.title': 'How to Play Ladrilho',
-            'tutorial.intro.content': 'Welcome! The goal is to complete rows and columns on your Wall with colorful tiles. Let\'s learn how!',
-            'tutorial.draft.title': '1. Drafting Tiles',
-            'tutorial.draft.content': 'On your turn, pick all tiles of ONE color from any Factory. The rest go to the center.',
-            'tutorial.pattern.title': '2. Pattern Lines',
-            'tutorial.pattern.content': 'Place your drafted tiles into one of your 5 Pattern Lines. Lines must be filled from right to left.',
-            'tutorial.wall.title': '3. Tiling the Wall',
-            'tutorial.wall.content': 'At the end of the round, completed lines move their tile to the Wall. This scores points based on adjacent tiles.',
-            'tutorial.penalty.title': '4. Penalties',
-            'tutorial.penalty.content': 'Tiles causing overflow or taken when you can\'t place them fall to the Floor Line. These lose you points!',
+    // Map step IDs to translation keys
+    const getStepContent = (stepId: StepId) => {
+        const contentMap: Record<StepId, { title: string; content: string }> = {
+            intro: { title: t.tutorialIntroTitle, content: t.tutorialIntroContent },
+            drafting: { title: t.tutorialDraftTitle, content: t.tutorialDraftContent },
+            pattern: { title: t.tutorialPatternTitle, content: t.tutorialPatternContent },
+            wall: { title: t.tutorialWallTitle, content: t.tutorialWallContent },
+            penalty: { title: t.tutorialPenaltyTitle, content: t.tutorialPenaltyContent },
         };
-        return texts[key] || defaultText;
+        return contentMap[stepId];
     };
 
-    const step = STEPS[currentStepIndex];
+    const stepId = STEP_IDS[currentStepIndex];
+    const stepContent = getStepContent(stepId);
 
     const handleNext = () => {
-        if (currentStepIndex < STEPS.length - 1) {
+        if (currentStepIndex < STEP_IDS.length - 1) {
             setCurrentStepIndex(prev => prev + 1);
         } else {
-            onComplete();
+            handleComplete();
         }
     };
 
@@ -79,6 +44,20 @@ export function TutorialOverlay({ onClose, onComplete }: TutorialOverlayProps) {
         if (currentStepIndex > 0) {
             setCurrentStepIndex(prev => prev - 1);
         }
+    };
+
+    const handleComplete = () => {
+        if (doNotShowAgain) {
+            localStorage.setItem('ladrilho_tutorial_completed', 'true');
+        }
+        onComplete();
+    };
+
+    const handleClose = () => {
+        if (doNotShowAgain) {
+            localStorage.setItem('ladrilho_tutorial_completed', 'true');
+        }
+        onClose();
     };
 
     return (
@@ -97,9 +76,9 @@ export function TutorialOverlay({ onClose, onComplete }: TutorialOverlayProps) {
                     {/* Header */}
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                            {getText(step.title, step.title)}
+                            {stepContent.title}
                         </h2>
-                        <button onClick={onClose} className="p-2 hover:bg-slate-800 rounded-full transition-colors text-slate-400 hover:text-white">
+                        <button onClick={handleClose} className="p-2 hover:bg-slate-800 rounded-full transition-colors text-slate-400 hover:text-white">
                             <X size={24} />
                         </button>
                     </div>
@@ -107,7 +86,7 @@ export function TutorialOverlay({ onClose, onComplete }: TutorialOverlayProps) {
                     {/* Animation Area */}
                     <div className="bg-slate-950/50 rounded-xl h-64 mb-6 flex items-center justify-center relative overflow-hidden border border-slate-800">
                         <AnimatePresence mode="wait">
-                            {step.id === 'intro' && (
+                            {stepId === 'intro' && (
                                 <motion.div
                                     key="intro"
                                     initial={{ opacity: 0 }}
@@ -124,7 +103,7 @@ export function TutorialOverlay({ onClose, onComplete }: TutorialOverlayProps) {
                                 </motion.div>
                             )}
 
-                            {step.id === 'drafting' && (
+                            {stepId === 'drafting' && (
                                 <motion.div key="drafting" className="relative w-full h-full flex items-center justify-center">
                                     {/* Factory Mock */}
                                     <div className="absolute left-10 p-4 bg-slate-800 rounded-full border border-slate-700 grid grid-cols-2 gap-2 w-24 h-24">
@@ -172,7 +151,7 @@ export function TutorialOverlay({ onClose, onComplete }: TutorialOverlayProps) {
                                 </motion.div>
                             )}
 
-                            {step.id === 'pattern' && (
+                            {stepId === 'pattern' && (
                                 <motion.div key="pattern" className="relative w-full h-full flex items-center justify-center">
                                     <div className="flex flex-col gap-2 items-end">
                                         {[1, 2, 3, 4, 5].map(i => (
@@ -196,7 +175,7 @@ export function TutorialOverlay({ onClose, onComplete }: TutorialOverlayProps) {
                                 </motion.div>
                             )}
 
-                            {step.id === 'wall' && (
+                            {stepId === 'wall' && (
                                 <motion.div key="wall" className="relative w-full h-full flex items-center justify-center gap-8">
                                     {/* Pattern Line Full */}
                                     <div className="flex gap-1">
@@ -238,7 +217,7 @@ export function TutorialOverlay({ onClose, onComplete }: TutorialOverlayProps) {
                                 </motion.div>
                             )}
 
-                            {step.id === 'penalty' && (
+                            {stepId === 'penalty' && (
                                 <motion.div key="penalty" className="relative w-full h-full flex flex-col items-center justify-center gap-4">
                                     <div className="text-red-400 font-bold mb-2">Overflow!</div>
                                     <div className="flex gap-2 p-4 border-b-2 border-red-500/50 w-3/4 justify-center bg-red-900/10">
@@ -255,14 +234,14 @@ export function TutorialOverlay({ onClose, onComplete }: TutorialOverlayProps) {
                     {/* Content */}
                     <div className="min-h-[80px]">
                         <p className="text-slate-300 text-lg leading-relaxed">
-                            {getText(step.content, step.content)}
+                            {stepContent.content}
                         </p>
                     </div>
 
                     {/* Footer / Nav */}
                     <div className="flex justify-between items-center mt-8 pt-6 border-t border-slate-700/50">
                         <div className="flex gap-2">
-                            {STEPS.map((_, idx) => (
+                            {STEP_IDS.map((_, idx: number) => (
                                 <div
                                     key={idx}
                                     className={`h-2 rounded-full transition-all duration-300 ${idx === currentStepIndex ? 'w-8 bg-blue-500' : 'w-2 bg-slate-700'
@@ -277,17 +256,30 @@ export function TutorialOverlay({ onClose, onComplete }: TutorialOverlayProps) {
                                     onClick={handleBack}
                                     className="px-4 py-2 hover:bg-slate-800 text-slate-300 rounded-lg transition-colors flex items-center gap-2"
                                 >
-                                    <ChevronLeft size={16} /> Back
+                                    <ChevronLeft size={16} /> {t.tutorialBack}
                                 </button>
                             )}
                             <button
                                 onClick={handleNext}
                                 className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-blue-500/20 transition-all flex items-center gap-2"
                             >
-                                {currentStepIndex === STEPS.length - 1 ? 'Finish' : 'Next'}
-                                {currentStepIndex !== STEPS.length - 1 && <ChevronRight size={16} />}
+                                {currentStepIndex === STEP_IDS.length - 1 ? t.tutorialFinish : t.tutorialNext}
+                                {currentStepIndex !== STEP_IDS.length - 1 && <ChevronRight size={16} />}
                             </button>
                         </div>
+                    </div>
+
+                    {/* Don't show again checkbox */}
+                    <div className="mt-4 flex items-center justify-center">
+                        <label className="flex items-center gap-2 cursor-pointer text-slate-400 text-sm hover:text-slate-300">
+                            <input
+                                type="checkbox"
+                                checked={doNotShowAgain}
+                                onChange={(e) => setDoNotShowAgain(e.target.checked)}
+                                className="w-4 h-4 rounded border-slate-600 bg-slate-800 text-blue-500 focus:ring-blue-500 focus:ring-offset-slate-900"
+                            />
+                            {t.tutorialDontShowAgain}
+                        </label>
                     </div>
 
                 </motion.div>

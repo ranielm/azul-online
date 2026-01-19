@@ -180,6 +180,22 @@ export const translations = {
     rulesEndGameText: 'O jogo termina quando um jogador completa uma linha horizontal na parede. O jogador com mais pontos vence!',
     rulesFirstPlayer: 'Marcador de Primeiro Jogador',
     rulesFirstPlayerText: 'Quem pegar peças do centro primeiro leva o marcador (-1 ponto) mas joga primeiro na próxima rodada.',
+
+    // Tutorial
+    tutorialIntroTitle: 'Como Jogar Ladrilho',
+    tutorialIntroContent: 'Bem-vindo! O objetivo é completar linhas e colunas na sua Parede com peças coloridas. Vamos aprender!',
+    tutorialDraftTitle: '1. Pegando Peças',
+    tutorialDraftContent: 'Na sua vez, pegue todas as peças de UMA cor de qualquer Fábrica. As outras vão para o centro.',
+    tutorialPatternTitle: '2. Linhas de Padrão',
+    tutorialPatternContent: 'Coloque as peças em uma das 5 Linhas de Padrão. Linhas são preenchidas da direita para a esquerda.',
+    tutorialWallTitle: '3. Colocando na Parede',
+    tutorialWallContent: 'No fim da rodada, linhas completas movem uma peça para a Parede. Isso pontua baseado em peças adjacentes.',
+    tutorialPenaltyTitle: '4. Penalidades',
+    tutorialPenaltyContent: 'Peças excedentes ou que não podem ser colocadas vão para o Chão. Isso causa pontos negativos!',
+    tutorialBack: 'Voltar',
+    tutorialNext: 'Próximo',
+    tutorialFinish: 'Finalizar',
+    tutorialDontShowAgain: 'Não mostrar novamente',
   },
   'en-US': {
     // Home
@@ -360,6 +376,22 @@ export const translations = {
     rulesEndGameText: 'The game ends when a player completes a horizontal row on the wall. The player with the most points wins!',
     rulesFirstPlayer: 'First Player Marker',
     rulesFirstPlayerText: 'Whoever takes tiles from the center first gets the marker (-1 point) but plays first next round.',
+
+    // Tutorial
+    tutorialIntroTitle: 'How to Play Ladrilho',
+    tutorialIntroContent: 'Welcome! The goal is to complete rows and columns on your Wall with colorful tiles. Let\'s learn how!',
+    tutorialDraftTitle: '1. Drafting Tiles',
+    tutorialDraftContent: 'On your turn, pick all tiles of ONE color from any Factory. The rest go to the center.',
+    tutorialPatternTitle: '2. Pattern Lines',
+    tutorialPatternContent: 'Place your drafted tiles into one of your 5 Pattern Lines. Lines must be filled from right to left.',
+    tutorialWallTitle: '3. Tiling the Wall',
+    tutorialWallContent: 'At the end of the round, completed lines move their tile to the Wall. This scores points based on adjacent tiles.',
+    tutorialPenaltyTitle: '4. Penalties',
+    tutorialPenaltyContent: 'Tiles causing overflow or taken when you can\'t place them fall to the Floor Line. These lose you points!',
+    tutorialBack: 'Back',
+    tutorialNext: 'Next',
+    tutorialFinish: 'Finish',
+    tutorialDontShowAgain: 'Don\'t show again',
   },
 } as const;
 
