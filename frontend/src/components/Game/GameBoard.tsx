@@ -6,6 +6,7 @@ import { FactoryDisplay } from '../Factory/FactoryDisplay';
 import { GameControls } from './GameControls';
 import { PenaltyNotifications } from './PenaltyNotification';
 import { RoundSummary } from './RoundSummary';
+import { SharedScoreTrack } from './SharedScoreTrack';
 import { useTranslation } from '../../i18n/useLanguage';
 
 interface GameBoardProps {
@@ -57,6 +58,9 @@ export function GameBoard({
           {isMyTurn ? t.yourTurn : t.playerTurn(currentPlayer?.name || '')}
         </motion.p>
       </div>
+
+      {/* Shared Score Track - All players on one track */}
+      <SharedScoreTrack players={gameState.players} currentPlayerId={playerId} />
 
       {/* Mobile: Vertical stack | Desktop: Side by side */}
       <div className="flex flex-col lg:grid lg:grid-cols-[1fr_auto] gap-4 sm:gap-8">
