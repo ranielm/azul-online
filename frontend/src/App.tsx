@@ -235,33 +235,40 @@ function App() {
         )}
 
         {/* Game Screen */}
-        {screen === 'game' && gameState && playerId && (
+        {screen === 'game' && (
           <motion.div
             key="game"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <GameBoard
-              gameState={gameState}
-              playerId={playerId}
-              selectedTiles={selectedTiles}
-              onSelectTiles={handleSelectTiles}
-              onClearSelection={handleClearSelection}
-              onMakeMove={makeMove}
-              onLeaveGame={handleLeaveRoom}
-              onShowTutorial={() => setShowTutorial(true)}
-            />
+            {gameState && playerId ? (
+              <>
+                <GameBoard
+                  gameState={gameState}
+                  playerId={playerId}
+                  selectedTiles={selectedTiles}
+                  onSelectTiles={handleSelectTiles}
+                  onClearSelection={handleClearSelection}
+                  onMakeMove={makeMove}
+                  onLeaveGame={handleLeaveRoom}
+                  onShowTutorial={() => setShowTutorial(true)}
+                />
 
-            {/* Game Over Modal */}
-            {gameState.phase === 'finished' && (
-              <GameOver
-                gameState={gameState}
-                playerId={playerId}
-                isHost={isHost}
-                onRestart={restartGame}
-                onLeave={handleLeaveRoom}
-              />
+                {/* Game Over Modal */}
+                {gameState.phase === 'finished' && (
+                  <GameOver
+                    gameState={gameState}
+                    playerId={playerId}
+                    isHost={isHost}
+                    onRestart={restartGame}
+                    onLeave={handleLeaveRoom}
+                  />
+                )}
+              </>
+            ) : (
+              // Fallback while exiting if state is cleared but animation is running
+              <div className="fixed inset-0 bg-slate-900" />
             )}
           </motion.div>
         )}
