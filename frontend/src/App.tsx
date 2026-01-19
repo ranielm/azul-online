@@ -55,14 +55,23 @@ function App() {
   }, [activeGameId, user?.username, isConnected, room, gameState, joinRoom, checkActiveGame, setActiveGameId]);
 
   // Check for room ID in URL
+  // Check for room ID in URL (Path or Query)
   useEffect(() => {
+    // 1. Check path for /game/:id
+    const pathMatch = window.location.pathname.match(/\/game\/([a-zA-Z0-9]+)/);
+    if (pathMatch && pathMatch[1]) {
+      setInitialRoomId(pathMatch[1].toUpperCase());
+      setScreen('join');
+      return;
+    }
+
+    // 2. Check query param ?room=:id
     const params = new URLSearchParams(window.location.search);
     const roomId = params.get('room');
     if (roomId) {
       setInitialRoomId(roomId.toUpperCase());
       setScreen('join');
-      // Clean up URL
-      window.history.replaceState({}, '', window.location.pathname);
+      // We do NOT clean up the URL anymore to allow auth redirection back to this context
     }
   }, []);
 

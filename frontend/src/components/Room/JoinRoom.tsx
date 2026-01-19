@@ -68,6 +68,18 @@ export function JoinRoom({ onJoinRoom, onBack, initialRoomId = '' }: JoinRoomPro
       csrfInput.value = csrfToken;
       form.appendChild(csrfInput);
 
+      // Add callbackUrl to return to this room (handling both manual entry and deep links)
+      const targetUrl = new URL(window.location.href);
+      if (roomId.trim()) {
+        targetUrl.searchParams.set('room', roomId.trim());
+      }
+
+      const callbackInput = document.createElement('input');
+      callbackInput.type = 'hidden';
+      callbackInput.name = 'callbackUrl';
+      callbackInput.value = targetUrl.toString();
+      form.appendChild(callbackInput);
+
       document.body.appendChild(form);
       form.submit();
     } catch (e) {

@@ -84,12 +84,12 @@ export function LandingPage({ onCreateRoom, onJoinRoom }: LandingPageProps) {
       csrfInput.value = csrfToken;
       form.appendChild(csrfInput);
 
-      // Add callbackUrl if we want to be explicit, though default is usually fine
-      // const callbackInput = document.createElement('input');
-      // callbackInput.type = 'hidden';
-      // callbackInput.name = 'callbackUrl';
-      // callbackInput.value = window.location.origin;
-      // form.appendChild(callbackInput);
+      // Add callbackUrl
+      const callbackInput = document.createElement('input');
+      callbackInput.type = 'hidden';
+      callbackInput.name = 'callbackUrl';
+      callbackInput.value = window.location.href;
+      form.appendChild(callbackInput);
 
       document.body.appendChild(form);
       form.submit();
