@@ -23,15 +23,7 @@ export function FactoryDisplay({
 }: FactoryDisplayProps) {
   const { t } = useTranslation();
 
-  // Count tiles in bag by color
-  const bagCounts = bag.reduce((acc, tile) => {
-    // Tile is just a string (Color)
-    const color = tile as unknown as TileColor; // Safe cast if we trust shared types, or just 'tile' if it is TileColor
-    acc[color] = (acc[color] || 0) + 1;
-    return acc;
-  }, {} as Record<TileColor, number>);
 
-  const colors: TileColor[] = ['blue', 'yellow', 'red', 'black', 'white'];
 
   return (
     <div className="flex flex-col gap-6">

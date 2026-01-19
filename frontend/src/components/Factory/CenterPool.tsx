@@ -102,7 +102,7 @@ export function CenterPool({
 
       {/* Stats Bar */}
       {!isEmpty && (
-        <div className="flex flex-wrap gap-3 justify-center pt-2 border-t border-slate-600/50">
+        <div className="flex flex-wrap gap-2 justify-center pt-2 border-t border-slate-600/50">
           {Array.from(colorGroups.entries()).map(([color, count]) => (
             <div key={color} className="flex items-center gap-1.5" title={`${count} ${color} tiles`}>
               <div className="scale-75 origin-center">
