@@ -160,22 +160,51 @@ export function RoundSummary({ gameState, playerId }: RoundSummaryProps) {
 
         // Find new tiles
         const newTiles: { row: number, col: number, color: any }[] = [];
-        let tilesPlacedCount = 0;
 
         currentWall.forEach((row, r) => {
           row.forEach((cell, c) => {
-            const prevCellFilled = prevWall[r]?.[c]?.filled ?? false;
+            const prevCell = prevWall[r]?.[c];
+            const prevCellFilled = prevCell ? prevCell.filled : false;
             if (cell.filled && !prevCellFilled) {
               newTiles.push({ row: r, col: c, color: cell.color });
-              tilesPlacedCount++;
             }
           });
         });
 
-        // Calculate score details for each new tile
-        const details: ScoreDetail[] = newTiles.map(tile => {
-          const score = calculateCellScore(currentWall, tile.row, tile.col);
-          return {
+        // IMPORTANT: Scoring must be purely sequential (Top to Bottom).
+        // Sorting by Row ensures we simulate the "One by One" rule.
+        newTiles.sort((a, b) => a.row - b.row);
+
+        // Create a temporary wall to simulate the sequence
+        // Deep copy the previous wall to start
+        const tempWall: WallCell[][] = prevWall.length > 0
+          ? JSON.parse(JSON.stringify(prevWall))
+          : Array(5).fill(null).map(() => Array(5).fill({ filled: false, color: 'blue' }));
+        // Note: Color placeholder 'blue' is fine, we just check 'filled' for adjacency logic helper
+
+        const details: ScoreDetail[] = [];
+        let tilesPlacedCount = 0;
+
+        for (const tile of newTiles) {
+          tilesPlacedCount++;
+
+          // 1. Calculate score relative to the WALL AS IT EXISTS NOW (including prev tiles this round)
+          // The helper 'calculateCellScore' returns the breakdown
+
+          // We need to mark it as filled temporarily in the helper? 
+          // Actually, the helper usually assumes the tile is IN the grid.
+          // So we should ADD it to tempWall FIRST?
+          // "The moment a tile is moved ... Points are calculated based on Final Position"
+          // "Count all tiles in that continuous sequence INCLUDING THE ONE JUST PLACED"
+
+          // So: Update tempWall -> Calculate
+          if (!tempWall[tile.row]) tempWall[tile.row] = []; // Safety check
+          if (!tempWall[tile.row][tile.col]) tempWall[tile.row][tile.col] = { filled: true, color: tile.color } as any;
+          else tempWall[tile.row][tile.col].filled = true; // Mark filled
+
+          const score = calculateCellScore(tempWall, tile.row, tile.col);
+
+          details.push({
             row: tile.row,
             col: tile.col,
             color: tile.color,
@@ -183,8 +212,8 @@ export function RoundSummary({ gameState, playerId }: RoundSummaryProps) {
             horizontalBonus: score.horizNeighbors,
             verticalBonus: score.vertNeighbors,
             total: score.total
-          };
-        });
+          });
+        }
 
         // We can now sum up details to check accuracy, but we trust the server score mostly.
         // The remaining delta is Floor Penalty.
