@@ -49,14 +49,6 @@ export function joinRoom(
     return { success: false, error: 'Room not found' };
   }
 
-  if (room.gameState.phase !== 'waiting') {
-    return { success: false, error: 'Game already in progress' };
-  }
-
-  if (room.gameState.players.length >= room.maxPlayers) {
-    return { success: false, error: 'Room is full' };
-  }
-
   // Check if player name is already taken or if it's a reconnection
   const existingPlayerIndex = room.gameState.players.findIndex(
     (p) => p.name.toLowerCase() === playerName.toLowerCase()
@@ -66,6 +58,7 @@ export function joinRoom(
     const existingPlayer = room.gameState.players[existingPlayerIndex];
 
     // If player exists and is disconnected, allow functionality to reconnect
+    // We allow this even if the game is in progress
     if (!existingPlayer.isConnected) {
       // Update player's ID to the new socket ID
       room.gameState.players[existingPlayerIndex].id = playerId;
@@ -78,6 +71,14 @@ export function joinRoom(
 
     // Otherwise name is taken by an active player
     return { success: false, error: 'Name already taken in this room' };
+  }
+
+  if (room.gameState.phase !== 'waiting') {
+    return { success: false, error: 'Game already in progress' };
+  }
+
+  if (room.gameState.players.length >= room.maxPlayers) {
+    return { success: false, error: 'Room is full' };
   }
 
   const newPlayer: Player = {

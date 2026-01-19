@@ -61,6 +61,11 @@ export function setupSocketHandlers(io: Server): void {
       // Notify the joining player
       socket.emit('room:joined', { room: result.room, playerId: socket.id });
 
+      // If game is in progress, also send the game state
+      if (result.room.gameState.phase !== 'waiting') {
+        socket.emit('game:started', { gameState: result.room.gameState });
+      }
+
       // Notify other players in the room
       socket.to(result.room.id).emit('room:player-joined', {
         player: result.room.gameState.players.find((p) => p.id === socket.id),
