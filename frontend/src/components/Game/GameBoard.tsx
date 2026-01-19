@@ -17,6 +17,7 @@ interface GameBoardProps {
   onClearSelection: () => void;
   onMakeMove: (move: PlayerMove) => void;
   onLeaveGame: () => void;
+  onShowTutorial?: () => void;
 }
 
 export function GameBoard({
@@ -27,6 +28,7 @@ export function GameBoard({
   onClearSelection,
   onMakeMove,
   onLeaveGame,
+  onShowTutorial,
 }: GameBoardProps) {
   const currentPlayer = gameState.players[gameState.currentPlayerIndex];
   const isMyTurn = currentPlayer?.id === playerId;
@@ -42,7 +44,7 @@ export function GameBoard({
   return (
     <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-6 pb-safe flex flex-col gap-4 lg:block">
       {/* Game Controls Toolbar */}
-      <GameControls onLeaveGame={onLeaveGame} />
+      <GameControls onLeaveGame={onLeaveGame} onShowTutorial={onShowTutorial} />
 
       {/* Game info header - compact on mobile */}
       {/* Added mt-14 to fix overlap with fixed buttons on mobile, and order-1 for mobile flow */}

@@ -13,6 +13,7 @@ import { Toast } from './components/UI/Toast';
 import { LanguageSelector } from './components/UI/LanguageSelector';
 import { useTranslation } from './i18n/useLanguage';
 import { TileSelection } from '@shared/types';
+import { TutorialOverlay } from './components/Tutorial/TutorialOverlay';
 
 type Screen = 'home' | 'create' | 'join' | 'lobby' | 'game';
 
@@ -20,6 +21,7 @@ function App() {
   const [screen, setScreen] = useState<Screen>('home');
   const [initialRoomId, setInitialRoomId] = useState<string>('');
   const [selectedTiles, setSelectedTiles] = useState<TileSelection | null>(null);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   const { createRoom, joinRoom, leaveRoom, startGame, makeMove, restartGame, changeRoomCode, checkActiveGame } =
     useSocket();
@@ -84,6 +86,17 @@ function App() {
     }
   }, [room, gameState]);
 
+  // Check for tutorial on first visit to game screen
+  useEffect(() => {
+    if (screen === 'game' && !localStorage.getItem('ladrilho_tutorial_seen')) {
+      // Delay slightly to let game load
+      const timer = setTimeout(() => {
+        setShowTutorial(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [screen]);
+
   // Clear selection when turn changes
   useEffect(() => {
     if (gameState) {
@@ -119,6 +132,11 @@ function App() {
 
   const isHost = room?.gameState.players.find((p) => p.id === playerId)?.isHost ?? false;
 
+  const handleTutorialComplete = () => {
+    setShowTutorial(false);
+    localStorage.setItem('ladrilho_tutorial_seen', 'true');
+  };
+
   return (
     <div className="min-h-screen">
       {/* Language selector */}
@@ -135,6 +153,15 @@ function App() {
 
       {/* Error toast */}
       <Toast message={error} onClose={clearError} />
+
+      <AnimatePresence>
+        {showTutorial && (
+          <TutorialOverlay
+            onClose={() => setShowTutorial(false)}
+            onComplete={handleTutorialComplete}
+          />
+        )}
+      </AnimatePresence>
 
       <AnimatePresence mode="wait">
         {/* Home Screen */}
@@ -223,6 +250,7 @@ function App() {
               onClearSelection={handleClearSelection}
               onMakeMove={makeMove}
               onLeaveGame={handleLeaveRoom}
+              onShowTutorial={() => setShowTutorial(true)}
             />
 
             {/* Game Over Modal */}
