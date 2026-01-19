@@ -17,9 +17,11 @@ interface AuthStore {
   isAuthenticated: boolean;
   isLoading: boolean;
   guestName: string;
+  displayName: string;
   activeGameId: string | null;
   checkSession: () => Promise<void>;
   setGuestName: (name: string) => void;
+  setDisplayName: (name: string) => void;
   setActiveGameId: (id: string | null) => void;
   login: () => void; // Redirects to signin
   logout: () => void;
@@ -32,6 +34,7 @@ export const useAuthStore = create<AuthStore>()(
       isAuthenticated: false,
       isLoading: true,
       guestName: '',
+      displayName: '',
       activeGameId: null,
 
       checkSession: async () => {
@@ -76,7 +79,9 @@ export const useAuthStore = create<AuthStore>()(
         }
       },
 
-      setGuestName: (guestName) => set({ guestName }),
+      setGuestName: (guestName) => set({ guestName, displayName: guestName }),
+
+      setDisplayName: (displayName) => set({ displayName }),
 
       setActiveGameId: (id) => set({ activeGameId: id }),
 

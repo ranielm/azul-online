@@ -19,7 +19,7 @@ export function setupSocketHandlers(io: Server): void {
 
     // Create a new room
     socket.on('room:create', (payload: CreateRoomPayload) => {
-      const { playerName, maxPlayers, playerImage } = payload;
+      const { playerName, maxPlayers, playerImage, playerEmail } = payload;
 
       if (!isValidPlayerName(playerName)) {
         socket.emit('room:error', { message: 'Invalid player name' });
@@ -31,7 +31,7 @@ export function setupSocketHandlers(io: Server): void {
         return;
       }
 
-      const room = roomManager.createNewRoom(socket.id, playerName.trim(), maxPlayers, playerImage);
+      const room = roomManager.createNewRoom(socket.id, playerName.trim(), maxPlayers, playerImage, playerEmail);
       socket.join(room.id);
       socketRooms.set(socket.id, room.id);
 
@@ -41,14 +41,14 @@ export function setupSocketHandlers(io: Server): void {
 
     // Join an existing room
     socket.on('room:join', (payload: JoinRoomPayload) => {
-      const { roomId, playerName, playerImage } = payload;
+      const { roomId, playerName, playerImage, playerEmail } = payload;
 
       if (!isValidPlayerName(playerName)) {
         socket.emit('room:error', { message: 'Invalid player name' });
         return;
       }
 
-      const result = roomManager.joinRoom(roomId.toUpperCase(), socket.id, playerName.trim(), playerImage);
+      const result = roomManager.joinRoom(roomId.toUpperCase(), socket.id, playerName.trim(), playerImage, playerEmail);
 
       if (!result.success || !result.room) {
         socket.emit('room:error', { message: result.error || 'Failed to join room' });

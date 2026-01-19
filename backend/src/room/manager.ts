@@ -11,7 +11,8 @@ export function createNewRoom(
   hostId: string,
   hostName: string,
   maxPlayers: 2 | 3 | 4,
-  hostImage?: string
+  hostImage?: string,
+  hostEmail?: string
 ): Room {
   let roomId = generateRoomId();
 
@@ -23,6 +24,7 @@ export function createNewRoom(
   const hostPlayer: Player = {
     id: hostId,
     name: hostName,
+    email: hostEmail,
     image: hostImage,
     board: {
       patternLines: [],
@@ -41,7 +43,8 @@ export function joinRoom(
   roomId: string,
   playerId: string,
   playerName: string,
-  playerImage?: string
+  playerImage?: string,
+  playerEmail?: string
 ): { success: boolean; room?: Room; error?: string } {
   const room = store.getRoom(roomId);
 
@@ -49,34 +52,55 @@ export function joinRoom(
     return { success: false, error: 'Room not found' };
   }
 
-  // Check if player name is already taken or if it's a reconnection
-  const existingPlayerIndex = room.gameState.players.findIndex(
-    (p) => p.name.toLowerCase() === playerName.toLowerCase()
-  );
+  // IDENTITY LOGIC:
+  // 1. Check if this is a REJOIN by email (same user, possibly new socket)
+  // 2. Check if name is taken by a DIFFERENT user (collision)
 
-  if (existingPlayerIndex !== -1) {
-    const existingPlayer = room.gameState.players[existingPlayerIndex];
+  // First, check for email-based rejoin (authenticated users)
+  if (playerEmail) {
+    const existingPlayerByEmail = room.gameState.players.findIndex(
+      (p) => p.email && p.email.toLowerCase() === playerEmail.toLowerCase()
+    );
 
-    // RECONNECTION LOGIC:
-    // Allow reconnection if:
-    // 1. Player is disconnected (standard case)
-    // 2. Player is "connected" but the socket ID is different (page refresh case)
-    //    This happens when the new page loads before the old socket's disconnect fires
-    const isNewSocket = existingPlayer.id !== playerId;
-    const canReconnect = !existingPlayer.isConnected || isNewSocket;
-
-    if (canReconnect) {
-      // Update player's ID to the new socket ID and mark connected
-      room.gameState.players[existingPlayerIndex].id = playerId;
-      room.gameState.players[existingPlayerIndex].isConnected = true;
+    if (existingPlayerByEmail !== -1) {
+      // REJOIN: Same authenticated user
+      room.gameState.players[existingPlayerByEmail].id = playerId;
+      room.gameState.players[existingPlayerByEmail].name = playerName; // Allow name update on rejoin
+      room.gameState.players[existingPlayerByEmail].image = playerImage;
+      room.gameState.players[existingPlayerByEmail].isConnected = true;
 
       store.updateRoom(roomId, room);
-      console.log(`Player ${playerName} reconnected to room ${roomId} (isNewSocket: ${isNewSocket})`);
+      console.log(`Player ${playerName} (${playerEmail}) rejoined room ${roomId} via email match`);
 
       return { success: true, room };
     }
+  }
 
-    // Otherwise name is taken by an active player with the SAME socket ID (edge case)
+  // Check for name collision with OTHER users
+  const nameCollision = room.gameState.players.find(
+    (p) => p.name.toLowerCase() === playerName.toLowerCase() &&
+      (!playerEmail || !p.email || p.email.toLowerCase() !== playerEmail.toLowerCase())
+  );
+
+  if (nameCollision) {
+    // For guests (no email), also check socket-based reconnection
+    if (!playerEmail && nameCollision.id !== playerId) {
+      const isNewSocket = nameCollision.id !== playerId;
+      const canReconnect = !nameCollision.isConnected || isNewSocket;
+
+      if (canReconnect) {
+        // Guest reconnection by name
+        const idx = room.gameState.players.findIndex(p => p.id === nameCollision.id);
+        room.gameState.players[idx].id = playerId;
+        room.gameState.players[idx].isConnected = true;
+
+        store.updateRoom(roomId, room);
+        console.log(`Guest ${playerName} reconnected to room ${roomId} (socket-based)`);
+
+        return { success: true, room };
+      }
+    }
+
     return { success: false, error: 'Name already taken in this room' };
   }
 
@@ -91,6 +115,7 @@ export function joinRoom(
   const newPlayer: Player = {
     id: playerId,
     name: playerName,
+    email: playerEmail,
     image: playerImage,
     board: {
       patternLines: [],
@@ -107,6 +132,7 @@ export function joinRoom(
   if (!updatedRoom) {
     return { success: false, error: 'Failed to join room' };
   }
+
 
   return { success: true, room: updatedRoom };
 }

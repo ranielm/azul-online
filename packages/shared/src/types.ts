@@ -39,6 +39,7 @@ export interface PlayerBoard {
 export interface Player {
   id: string;
   name: string;
+  email?: string;
   image?: string;
   board: PlayerBoard;
   isConnected: boolean;
@@ -115,6 +116,7 @@ export interface FinalScore {
 // Socket event payloads
 export interface CreateRoomPayload {
   playerName: string;
+  playerEmail?: string;
   playerImage?: string;
   maxPlayers: 2 | 3 | 4;
 }
@@ -122,6 +124,7 @@ export interface CreateRoomPayload {
 export interface JoinRoomPayload {
   roomId: string;
   playerName: string;
+  playerEmail?: string;
   playerImage?: string;
 }
 

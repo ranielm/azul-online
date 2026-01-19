@@ -187,11 +187,22 @@ export function JoinRoom({ onJoinRoom, onBack, initialRoomId = '' }: JoinRoomPro
           </div>
         )}
 
-        {/* Show name display when authenticated */}
+        {/* Show name input when authenticated - editable for custom display name */}
         {isAuthenticated && hasPredefinedName && (
-          <div className="text-center mb-4">
-            <p className="text-slate-400 text-sm">{t.playingAs}</p>
-            <p className="text-white font-bold text-lg">{playerName}</p>
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">
+              {t.playingAs}
+            </label>
+            <input
+              type="text"
+              value={playerName}
+              onChange={(e) => setPlayerName(e.target.value)}
+              placeholder={t.enterYourName}
+              maxLength={20}
+              className="w-full px-4 py-3 bg-slate-700 rounded-lg border border-slate-600
+                         focus:border-blue-500 focus:ring-1 focus:ring-blue-500
+                         outline-none transition-colors"
+            />
           </div>
         )}
 
