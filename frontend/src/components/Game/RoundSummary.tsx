@@ -130,7 +130,7 @@ const getNeighbors = (wall: WallCell[][], row: number, col: number): WallHighlig
 };
 
 export function RoundSummary({ gameState, playerId }: RoundSummaryProps) {
-  const [showSummary, setShowSummary] = useState(false);
+  const [showSummary, setShowSummary] = useState(true);
   const [roundScores, setRoundScores] = useState<PlayerRoundScore[]>([]);
   const [completedRound, setCompletedRound] = useState(0);
   const prevRoundRef = useRef<number>(0);
