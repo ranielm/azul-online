@@ -9,9 +9,10 @@ import { useThemeStore } from '../../store/themeStore';
 interface GameControlsProps {
   onLeaveGame: () => void;
   onShowTutorial?: () => void;
+  roomId?: string;
 }
 
-export function GameControls({ onLeaveGame, onShowTutorial }: GameControlsProps) {
+export function GameControls({ onLeaveGame, onShowTutorial, roomId }: GameControlsProps) {
   const { t } = useTranslation();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showLeaveModal, setShowLeaveModal] = useState(false);
@@ -65,6 +66,28 @@ export function GameControls({ onLeaveGame, onShowTutorial }: GameControlsProps)
         animate={{ opacity: 1, y: 0 }}
         className="fixed top-4 right-32 z-40 flex items-center gap-2"
       >
+        {/* Room Code Badge */}
+        {roomId && (
+          <div
+            className="px-3 py-1.5 bg-slate-800/70 backdrop-blur-sm rounded-lg border border-slate-600/30 flex items-center gap-2 cursor-pointer hover:bg-slate-700/70 transition-colors"
+            onClick={() => {
+              navigator.clipboard.writeText(roomId);
+              // Brief visual feedback
+              const el = document.getElementById('room-code-badge');
+              if (el) {
+                el.classList.add('text-green-400');
+                setTimeout(() => el.classList.remove('text-green-400'), 1500);
+              }
+            }}
+            title={t.copyRoomLink}
+          >
+            <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+            </svg>
+            <span id="room-code-badge" className="font-mono text-sm text-slate-300 tracking-wider transition-colors">{roomId}</span>
+          </div>
+        )}
+
         {/* Theme Toggle */}
         <IconButton
           onClick={toggleTheme}

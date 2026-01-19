@@ -66,7 +66,7 @@ export function GameBoard({
   return (
     <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-6 pb-safe flex flex-col gap-4 lg:block">
       {/* Game Controls Toolbar */}
-      <GameControls onLeaveGame={onLeaveGame} onShowTutorial={onShowTutorial} />
+      <GameControls onLeaveGame={onLeaveGame} onShowTutorial={onShowTutorial} roomId={gameState.id} />
 
       {/* Game info header - compact on mobile */}
       {/* Added mt-14 to fix overlap with fixed buttons on mobile, and order-1 for mobile flow */}
