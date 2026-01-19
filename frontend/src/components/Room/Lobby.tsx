@@ -52,45 +52,79 @@ export function Lobby({ room, playerId, onStartGame, onLeaveRoom, onChangeCode }
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-slate-800 rounded-xl p-8 w-full max-w-md"
+      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+      className="glass-card relative z-10 px-8 py-10 rounded-2xl w-full max-w-md"
     >
-      <h2 className="text-2xl font-bold mb-2 text-center">{t.waitingRoom}</h2>
+      {/* Title with decorative underline */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="text-center mb-6"
+      >
+        <h2 className="text-3xl font-bold mb-2 text-tile-white tracking-tight">{t.waitingRoom}</h2>
+
+        {/* Decorative underline */}
+        <div className="flex justify-center gap-2 mb-4">
+          <div className="w-6 h-1 rounded-full bg-gradient-to-r from-[#006DB2] to-[#0080CC]" />
+          <div className="w-6 h-1 rounded-full bg-gradient-to-r from-[#E6A745] to-[#F0B652]" />
+          <div className="w-6 h-1 rounded-full bg-gradient-to-r from-[#D93844] to-[#E84550]" />
+        </div>
+
+        <p className="text-slate-400 text-sm">{t.roomCode}</p>
+      </motion.div>
 
       {/* Room Code */}
-      <div className="text-center mb-6">
-        <p className="text-slate-400 text-sm mb-2">{t.roomCode}</p>
-        <div className="flex items-center justify-center gap-3">
-          <span className="text-4xl font-mono font-bold tracking-widest text-blue-400">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="text-center mb-6"
+      >
+        <div className="flex items-center justify-center gap-3 flex-wrap">
+          <span className="text-4xl font-mono font-bold tracking-widest bg-gradient-to-r from-blue-400 to-blue-500 bg-clip-text text-transparent">
             {room.id}
           </span>
-          <Button size="sm" variant="ghost" onClick={handleCopyLink}>
-            {copied ? t.copied : t.copyLink}
-          </Button>
-          {isHost && onChangeCode && (
-            <Button size="sm" variant="ghost" onClick={() => setShowChangeCode(true)}>
-              {t.changeCode}
-            </Button>
-          )}
+          <div className="flex gap-2">
+            <motion.button
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleCopyLink}
+              className="px-3 py-1.5 text-sm bg-slate-700/50 hover:bg-slate-600/50 rounded-lg border border-slate-600/30 text-slate-300 hover:text-white transition-all"
+            >
+              {copied ? t.copied : t.copyLink}
+            </motion.button>
+            {isHost && onChangeCode && (
+              <motion.button
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowChangeCode(true)}
+                className="px-3 py-1.5 text-sm bg-slate-700/50 hover:bg-slate-600/50 rounded-lg border border-slate-600/30 text-slate-300 hover:text-white transition-all"
+              >
+                {t.changeCode}
+              </motion.button>
+            )}
+          </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Change Code Modal */}
       {showChangeCode && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"
           onClick={() => setShowChangeCode(false)}
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-slate-800 rounded-xl p-6 w-full max-w-sm mx-4"
+            className="glass-card rounded-2xl p-6 w-full max-w-sm mx-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-xl font-bold mb-4">{t.changeCodeTitle}</h3>
+            <h3 className="text-xl font-bold mb-4 text-white">{t.changeCodeTitle}</h3>
             <p className="text-slate-400 text-sm mb-4">{t.changeCodeDescription}</p>
             <input
               type="text"
@@ -100,7 +134,7 @@ export function Lobby({ room, playerId, onStartGame, onLeaveRoom, onChangeCode }
                 setCodeError('');
               }}
               placeholder={t.enterNewRoomCode}
-              className="w-full px-4 py-3 bg-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-center text-2xl tracking-widest uppercase mb-2"
+              className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-center text-2xl tracking-widest uppercase mb-2"
               maxLength={6}
               autoFocus
             />
@@ -133,12 +167,17 @@ export function Lobby({ room, playerId, onStartGame, onLeaveRoom, onChangeCode }
       )}
 
       {/* Players List */}
-      <div className="mb-6">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4 }}
+        className="mb-6"
+      >
         <div className="flex justify-between items-center mb-3">
           <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wide">
             {t.playersList}
           </h3>
-          <span className="text-sm text-slate-500">
+          <span className="text-sm text-slate-500 bg-slate-800/50 px-2 py-0.5 rounded">
             {room.gameState.players.length}/{room.maxPlayers}
           </span>
         </div>
@@ -149,17 +188,17 @@ export function Lobby({ room, playerId, onStartGame, onLeaveRoom, onChangeCode }
               key={player.id}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="flex items-center justify-between p-3 bg-slate-700 rounded-lg"
+              transition={{ delay: 0.5 + index * 0.1 }}
+              className="flex items-center justify-between p-3 bg-slate-800/30 backdrop-blur-sm rounded-xl border border-slate-700/30"
             >
               <div className="flex items-center gap-3">
                 <span
                   className={`
-                    w-3 h-3 rounded-full
-                    ${player.isConnected ? 'bg-green-500' : 'bg-red-500'}
+                    w-3 h-3 rounded-full animate-pulse
+                    ${player.isConnected ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 'bg-red-500'}
                   `}
                 />
-                <span className="font-medium">
+                <span className="font-medium text-white">
                   {player.name}
                   {player.id === playerId && (
                     <span className="text-blue-400 ml-2">({t.you})</span>
@@ -167,7 +206,7 @@ export function Lobby({ room, playerId, onStartGame, onLeaveRoom, onChangeCode }
                 </span>
               </div>
               {player.isHost && (
-                <span className="text-xs bg-yellow-600 px-2 py-1 rounded font-semibold">
+                <span className="text-xs bg-gradient-to-r from-yellow-600 to-yellow-500 px-2 py-1 rounded-lg font-semibold text-white shadow-md">
                   {t.host}
                 </span>
               )}
@@ -177,43 +216,61 @@ export function Lobby({ room, playerId, onStartGame, onLeaveRoom, onChangeCode }
           {/* Empty slots */}
           {Array.from({ length: room.maxPlayers - room.gameState.players.length }).map(
             (_, i) => (
-              <div
+              <motion.div
                 key={`empty-${i}`}
-                className="flex items-center p-3 bg-slate-700/50 rounded-lg border-2 border-dashed border-slate-600"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7 + i * 0.1 }}
+                className="flex items-center p-3 bg-slate-800/20 rounded-xl border-2 border-dashed border-slate-700/50"
               >
-                <span className="text-slate-500">{t.waitingForPlayer}</span>
-              </div>
+                <span className="text-slate-500 text-sm">{t.waitingForPlayer}</span>
+              </motion.div>
             )
           )}
         </div>
-      </div>
+      </motion.div>
 
       {/* Actions */}
-      <div className="space-y-3">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        className="space-y-3"
+      >
         {isHost ? (
           <>
-            <Button
-              variant="primary"
+            <motion.button
+              whileHover={{ y: -2, boxShadow: '0 8px 20px rgba(0, 109, 178, 0.4)' }}
+              whileTap={{ y: 0 }}
               onClick={onStartGame}
               disabled={!canStart}
-              className="w-full"
+              className="landing-btn-primary w-full py-4 px-6 rounded-xl font-semibold text-lg text-white
+                         transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {canStart ? t.startGame : t.needMorePlayers(2 - room.gameState.players.length)}
-            </Button>
+            </motion.button>
             <p className="text-xs text-slate-500 text-center">
               {t.hostCanStart}
             </p>
           </>
         ) : (
-          <p className="text-center text-slate-400">
-            {t.waitingForHost}
-          </p>
+          <div className="text-center py-3 px-4 bg-slate-800/30 rounded-xl border border-slate-700/30">
+            <p className="text-slate-400 text-sm">
+              {t.waitingForHost}
+            </p>
+          </div>
         )}
 
-        <Button variant="danger" onClick={onLeaveRoom} className="w-full">
+        <motion.button
+          whileHover={{ y: -2, backgroundColor: 'rgba(220, 38, 38, 0.3)' }}
+          whileTap={{ y: 0 }}
+          onClick={onLeaveRoom}
+          className="w-full py-3 px-6 rounded-xl font-medium text-red-400 border border-red-500/30 
+                     bg-red-500/10 hover:text-red-300 transition-all duration-200"
+        >
           {t.leaveRoom}
-        </Button>
-      </div>
+        </motion.button>
+      </motion.div>
     </motion.div>
   );
 }
