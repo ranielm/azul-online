@@ -19,10 +19,12 @@ interface AuthStore {
   guestName: string;
   displayName: string;
   activeGameId: string | null;
+  intentionallyLeft: boolean; // Flag to prevent auto-reconnect after intentional exit
   checkSession: () => Promise<void>;
   setGuestName: (name: string) => void;
   setDisplayName: (name: string) => void;
   setActiveGameId: (id: string | null) => void;
+  setIntentionallyLeft: (value: boolean) => void;
   login: () => void; // Redirects to signin
   logout: () => void;
 }
@@ -36,6 +38,7 @@ export const useAuthStore = create<AuthStore>()(
       guestName: '',
       displayName: '',
       activeGameId: null,
+      intentionallyLeft: false,
 
       checkSession: async () => {
         console.log('[AuthStore] Session state: loading');
@@ -84,6 +87,8 @@ export const useAuthStore = create<AuthStore>()(
       setDisplayName: (displayName) => set({ displayName }),
 
       setActiveGameId: (id) => set({ activeGameId: id }),
+
+      setIntentionallyLeft: (value) => set({ intentionallyLeft: value }),
 
       login: () => {
         // Redirect to home where LandingPage handles the UI interaction

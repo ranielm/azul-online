@@ -31,7 +31,7 @@ function App() {
   const { room, gameState, playerId, error, clearError, isConnected } =
     useGameStore();
 
-  const { activeGameId, user, setActiveGameId } = useAuthStore();
+  const { activeGameId, user, setActiveGameId, intentionallyLeft, setIntentionallyLeft } = useAuthStore();
 
   const { t } = useTranslation();
   const { theme } = useThemeStore();
@@ -48,6 +48,12 @@ function App() {
 
   // Handle automatic reconnection
   useEffect(() => {
+    // Skip auto-reconnect if user intentionally left the game
+    if (intentionallyLeft) {
+      console.log('Skipping auto-reconnect: user intentionally left');
+      return;
+    }
+
     if (isConnected && user?.username && !room && !gameState) {
       // 1. If we have a known active game from AuthStore, try to join it
       if (activeGameId) {
@@ -67,7 +73,7 @@ function App() {
         });
       }
     }
-  }, [activeGameId, user?.username, isConnected, room, gameState, joinRoom, checkActiveGame, setActiveGameId]);
+  }, [activeGameId, user?.username, isConnected, room, gameState, joinRoom, checkActiveGame, setActiveGameId, intentionallyLeft]);
 
   // Check for room ID in URL
   // Check for room ID in URL (Path or Query)
@@ -121,16 +127,19 @@ function App() {
   }, [gameState?.currentPlayerIndex, playerId]);
 
   const handleCreateRoom = (playerName: string, maxPlayers: 2 | 3 | 4) => {
+    setIntentionallyLeft(false); // Reset flag when starting new game
     createRoom(playerName, maxPlayers);
   };
 
   const handleJoinRoom = (roomId: string, playerName: string) => {
+    setIntentionallyLeft(false); // Reset flag when joining game
     joinRoom(roomId, playerName);
   };
 
   const handleLeaveRoom = () => {
     leaveRoom();
     setActiveGameId(null);
+    setIntentionallyLeft(true); // Prevent auto-reconnect after intentional exit
     setScreen('home');
     setSelectedTiles(null);
   };
