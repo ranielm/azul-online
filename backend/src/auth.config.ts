@@ -210,6 +210,16 @@ export const authConfig = {
     debug: true,
     // Cross-site cookie configuration for production (different domains)
     cookies: {
+        // Session token - CRUCIAL for cross-site authentication
+        sessionToken: {
+            name: isProduction ? '__Secure-authjs.session-token' : 'authjs.session-token',
+            options: {
+                httpOnly: true,
+                sameSite: isProduction ? 'none' as const : 'lax' as const,
+                path: '/',
+                secure: isProduction,
+            },
+        },
         pkceCodeVerifier: {
             name: 'authjs.pkce.code_verifier',
             options: {

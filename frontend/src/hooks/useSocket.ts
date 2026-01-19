@@ -75,7 +75,17 @@ export function useSocket() {
     };
 
     const onRoomError = (data: any) => {
+      console.error('Room error:', data.message);
       setError(data.message);
+
+      // If room doesn't exist anymore, clear local state
+      if (data.message?.includes('not found') || data.message?.includes('Player not found')) {
+        console.log('Clearing stale room/player data');
+        localStorage.removeItem('azul-room-id');
+        localStorage.removeItem('azul-player-id');
+        setRoom(null);
+        setGameState(null);
+      }
     };
 
     const onGameStarted = (data: any) => {
@@ -91,7 +101,17 @@ export function useSocket() {
     };
 
     const onGameError = (data: any) => {
+      console.error('Game error:', data.message);
       setError(data.message);
+
+      // If player/room doesn't exist anymore, clear local state  
+      if (data.message?.includes('not found') || data.message?.includes('Player not found')) {
+        console.log('Clearing stale room/player data from game error');
+        localStorage.removeItem('azul-room-id');
+        localStorage.removeItem('azul-player-id');
+        setRoom(null);
+        setGameState(null);
+      }
     };
 
     const onPlayerReconnected = (data: any) => {
