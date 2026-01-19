@@ -6,6 +6,7 @@ import { Wall } from './Wall';
 import { FloorLine } from './FloorLine';
 import { getValidPatternLines } from '../../utils/gameHelpers';
 import { useTranslation } from '../../i18n/useLanguage';
+import { UserAvatar } from '../UI/UserAvatar';
 
 interface BoardProps {
   player: Player;
@@ -84,18 +85,29 @@ export function Board({
     >
       {/* Player info header */}
       <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center gap-2">
-          <span
-            className={`
-              w-3 h-3 rounded-full
-              ${player.isConnected ? 'bg-green-500' : 'bg-red-500'}
-            `}
-          />
-          <span className="font-semibold text-lg">
-            {player.name}
-            {isMyBoard && ` (${t.you})`}
-            {player.isHost && ` (${t.host})`}
-          </span>
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <UserAvatar
+              src={player.image}
+              name={player.name}
+              size="md"
+            />
+            <span
+              className={`
+                absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border border-slate-900
+                ${player.isConnected ? 'bg-green-500' : 'bg-red-500'}
+              `}
+            />
+          </div>
+          <div className="flex flex-col">
+            <span className="font-semibold text-lg leading-tight">
+              {player.name}
+              {isMyBoard && <span className="text-blue-400 text-base ml-1">({t.you})</span>}
+            </span>
+            {player.isHost && (
+              <span className="text-xs text-yellow-500 font-medium tracking-wide uppercase">{t.host}</span>
+            )}
+          </div>
         </div>
       </div>
 

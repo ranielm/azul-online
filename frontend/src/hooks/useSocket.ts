@@ -2,6 +2,7 @@ import { useEffect, useCallback } from 'react';
 import socketService from '../services/socket';
 import { useGameStore } from '../store/gameStore';
 import { PlayerMove } from '@shared/types';
+import { useAuthStore } from '../store/authStore';
 
 export function useSocket() {
   const {
@@ -13,6 +14,8 @@ export function useSocket() {
     playerId,
     room,
   } = useGameStore();
+
+  const user = useAuthStore((state) => state.user);
 
   // Initialize socket connection
   useEffect(() => {
@@ -176,12 +179,12 @@ export function useSocket() {
 
   // Actions
   const createRoom = useCallback((playerName: string, maxPlayers: 2 | 3 | 4) => {
-    socketService.createRoom(playerName, maxPlayers);
-  }, []);
+    socketService.createRoom(playerName, maxPlayers, user?.image || undefined);
+  }, [user?.image]);
 
   const joinRoom = useCallback((roomId: string, playerName: string) => {
-    socketService.joinRoom(roomId, playerName);
-  }, []);
+    socketService.joinRoom(roomId, playerName, user?.image || undefined);
+  }, [user?.image]);
 
   const leaveRoom = useCallback(() => {
     if (room) {

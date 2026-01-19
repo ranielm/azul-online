@@ -4,6 +4,7 @@ import { Room, Player } from '@shared/types';
 import { Button } from '../UI/Button';
 import { copyToClipboard, getRoomUrl } from '../../utils/gameHelpers';
 import { useTranslation } from '../../i18n/useLanguage';
+import { UserAvatar } from '../UI/UserAvatar';
 
 interface LobbyProps {
   room: Room;
@@ -192,12 +193,19 @@ export function Lobby({ room, playerId, onStartGame, onLeaveRoom, onChangeCode }
               className="flex items-center justify-between p-3 bg-slate-800/30 backdrop-blur-sm rounded-xl border border-slate-700/30"
             >
               <div className="flex items-center gap-3">
-                <span
-                  className={`
-                    w-3 h-3 rounded-full animate-pulse
-                    ${player.isConnected ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 'bg-red-500'}
-                  `}
-                />
+                <div className="relative">
+                  <UserAvatar
+                    src={player.image}
+                    name={player.name}
+                    size="md"
+                  />
+                  <span
+                    className={`
+                      absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border border-slate-800
+                      ${player.isConnected ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 'bg-red-500'}
+                    `}
+                  />
+                </div>
                 <span className="font-medium text-white">
                   {player.name}
                   {player.id === playerId && (

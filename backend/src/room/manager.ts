@@ -10,7 +10,8 @@ const generateRoomId = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', RO
 export function createNewRoom(
   hostId: string,
   hostName: string,
-  maxPlayers: 2 | 3 | 4
+  maxPlayers: 2 | 3 | 4,
+  hostImage?: string
 ): Room {
   let roomId = generateRoomId();
 
@@ -22,6 +23,7 @@ export function createNewRoom(
   const hostPlayer: Player = {
     id: hostId,
     name: hostName,
+    image: hostImage,
     board: {
       patternLines: [],
       wall: [],
@@ -38,7 +40,8 @@ export function createNewRoom(
 export function joinRoom(
   roomId: string,
   playerId: string,
-  playerName: string
+  playerName: string,
+  playerImage?: string
 ): { success: boolean; room?: Room; error?: string } {
   const room = store.getRoom(roomId);
 
@@ -80,6 +83,7 @@ export function joinRoom(
   const newPlayer: Player = {
     id: playerId,
     name: playerName,
+    image: playerImage,
     board: {
       patternLines: [],
       wall: [],

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@shared/types';
+import { UserAvatar } from '../UI/UserAvatar';
 
 interface SharedScoreTrackProps {
     players: Player[];
@@ -80,7 +81,9 @@ export function SharedScoreTrack({ players, currentPlayerId }: SharedScoreTrackP
               `}
                             whileHover={{ scale: 1.05 }}
                         >
-                            <div className={`w-4 h-4 rounded-full ${color.bg} border-2 border-white/50 shadow-md`} />
+                            <div className={`w-6 h-6 rounded-full border-2 border-white/50 shadow-md flex items-center justify-center overflow-hidden`}>
+                                <UserAvatar src={player.image} name={player.name} size="sm" className="w-full h-full" />
+                            </div>
                             <span className="text-sm font-medium text-white">
                                 {player.name}
                             </span>
@@ -154,18 +157,19 @@ export function SharedScoreTrack({ players, currentPlayerId }: SharedScoreTrackP
                                                 damping: 25,
                                             }}
                                             className={`
-                        absolute w-7 h-7 rounded-full
+                        absolute w-8 h-8 rounded-full
                         ${color.bg} border-2 border-white
                         flex items-center justify-center
-                        text-xs font-bold text-white
                         shadow-lg ${color.shadow}
                         ${isCurrentPlayer ? 'ring-2 ring-yellow-400 animate-bounce' : ''}
                         z-20
                       `}
-                                            style={{ top: '-8px' }}
+                                            style={{ top: '-12px' }}
                                             title={`${player.name}: ${exactScore} pts`}
                                         >
-                                            {player.name.charAt(0).toUpperCase()}
+                                            <div className="w-full h-full rounded-full overflow-hidden">
+                                                <UserAvatar src={player.image} name={player.name} size="sm" />
+                                            </div>
                                         </motion.div>
                                     );
                                 })}
