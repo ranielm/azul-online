@@ -286,12 +286,16 @@ export const authConfig = {
         async session({ session, token }: any) {
             console.log("AUTH CALLBACK: SESSION", {
                 userId: session?.user?.id,
-                sessionToken: !!token
+                sessionToken: !!token,
+                image: token?.picture || session?.user?.image
             });
-            // IMPORTANT: Copy user id from token to session
-            if (token?.sub) {
+            // IMPORTANT: Copy user data from token to session
+            if (token) {
                 session.user = session.user || {};
                 session.user.id = token.sub;
+                session.user.image = token.picture || session.user.image;
+                session.user.name = token.name || session.user.name;
+                session.user.email = token.email || session.user.email;
             }
             return session;
         },

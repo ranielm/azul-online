@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from '../../i18n/useLanguage';
 import { useAuthStore } from '../../store/authStore';
 import { GameRules } from '../Game/GameRules';
+import { UserAvatar } from '../UI/UserAvatar';
 
 interface LandingPageProps {
   onCreateRoom: () => void;
@@ -180,13 +181,11 @@ export function LandingPage({ onCreateRoom, onJoinRoom }: LandingPageProps) {
                   className="mb-6"
                 >
                   <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20 mb-4 flex items-center gap-4">
-                    {user.image ? (
-                      <img src={user.image} alt={user.name} className="w-12 h-12 rounded-full border-2 border-blue-400" />
-                    ) : (
-                      <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-xl font-bold">
-                        {user.username?.[0]?.toUpperCase()}
-                      </div>
-                    )}
+                    <UserAvatar
+                      src={user.image}
+                      name={user.name || user.username || 'User'}
+                      size="lg"
+                    />
                     <div>
                       <p className="text-slate-200 text-sm">Welcome back,</p>
                       <p className="text-white font-bold text-lg">{user.name || user.username}</p>
