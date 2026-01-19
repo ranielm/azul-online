@@ -280,9 +280,13 @@ export function RoundSummary({ gameState, playerId }: RoundSummaryProps) {
           >
             {/* Header */}
             <div className="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
-              <div>
-                <h2 className="text-xl font-bold">{t.roundComplete(completedRound)}</h2>
-                <p className="text-slate-400 text-sm">{t.nextRound(gameState.round)}</p>
+              <div className="text-center flex-1">
+                <h2 className="text-2xl font-bold mb-1">
+                  {t.roundComplete(completedRound)}
+                </h2>
+                <p className="text-slate-400 text-sm">
+                  {t.nextRound(gameState.round)}
+                </p>
               </div>
               <Button variant="ghost" size="sm" onClick={handleClose}>
                 ✕
