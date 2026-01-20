@@ -29,8 +29,8 @@ html:not(.dark) body {
 }
 
 html:not(.dark) .landing-background {
-  background: #f1f5f9;
-  /* Light mode: slate-100 */
+  background: transparent;
+  /* Light mode: also transparent to show ambient glow */
 }
 
 .landing-background::before {
